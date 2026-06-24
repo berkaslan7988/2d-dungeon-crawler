@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BossData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/boss_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Kral Vorlak, Güneşsiz Taç'ın Efendisi"
+intro_text = "Demek tahtıma çıkan son ölümlü sensin.\nKrallığım kül oldu, halkım taşa döndü... ama ben hâlâ buradayım, sonsuza dek.\nSen de bu karanlığa gömüleceksin."
+defeat_text = "Taç... başımdan düşüyor... Onca yıldan sonra... ışığı yeniden hissediyorum.\nBelki de kurtuluş buymuş. Lanet seninle bitsin, kahraman.\nGüneş... yeniden... doğsun."
+is_final = true
+sprite_tint = Color(0.8, 0.2, 0.25, 1)
+sprite_scale = 2.75
+max_health = 380.0
+move_speed = 42.0
+slam_damage = 24.0
+volley_damage = 11.0
+volley_count = 14
+summon_count = 3

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"big_health"
+display_name = "Sağlam Beden"
+description = "+50 azami can"
+rarity = 1
+upgrade_type = 2
+value = 50.0
+weight = 7.0
+meta_cost = 0

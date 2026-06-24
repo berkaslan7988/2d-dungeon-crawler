@@ -1,0 +1,128 @@
+[gd_resource type="Resource" script_class="LootTable" load_steps=33 format=3]
+
+[ext_resource type="Script" path="res://resources/loot_table.gd" id="1"]
+[ext_resource type="Script" path="res://resources/loot_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/items/rusty_sword.tres" id="3"]
+[ext_resource type="Resource" path="res://data/items/iron_sword.tres" id="4"]
+[ext_resource type="Resource" path="res://data/items/steel_dagger.tres" id="5"]
+[ext_resource type="Resource" path="res://data/items/broadsword.tres" id="6"]
+[ext_resource type="Resource" path="res://data/items/leather_armor.tres" id="7"]
+[ext_resource type="Resource" path="res://data/items/iron_armor.tres" id="8"]
+[ext_resource type="Resource" path="res://data/items/leather_cap.tres" id="9"]
+[ext_resource type="Resource" path="res://data/items/leather_boots.tres" id="10"]
+[ext_resource type="Resource" path="res://data/items/iron_helm.tres" id="11"]
+[ext_resource type="Resource" path="res://data/items/iron_greaves.tres" id="12"]
+[ext_resource type="Resource" path="res://data/items/health_potion.tres" id="13"]
+[ext_resource type="Resource" path="res://data/items/greater_potion.tres" id="14"]
+[ext_resource type="Resource" path="res://data/items/war_hammer.tres" id="15"]
+[ext_resource type="Resource" path="res://data/items/plate_armor.tres" id="16"]
+[ext_resource type="Resource" path="res://data/items/flame_blade.tres" id="17"]
+
+[sub_resource type="Resource" id="1"]
+script = ExtResource("2")
+item = ExtResource("3")
+weight = 2.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="2"]
+script = ExtResource("2")
+item = ExtResource("4")
+weight = 2.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="3"]
+script = ExtResource("2")
+item = ExtResource("5")
+weight = 2.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="4"]
+script = ExtResource("2")
+item = ExtResource("6")
+weight = 1.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="5"]
+script = ExtResource("2")
+item = ExtResource("7")
+weight = 2.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="6"]
+script = ExtResource("2")
+item = ExtResource("8")
+weight = 2.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="7"]
+script = ExtResource("2")
+item = ExtResource("9")
+weight = 2.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="8"]
+script = ExtResource("2")
+item = ExtResource("10")
+weight = 2.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="9"]
+script = ExtResource("2")
+item = ExtResource("11")
+weight = 1.5
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="10"]
+script = ExtResource("2")
+item = ExtResource("12")
+weight = 1.5
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="11"]
+script = ExtResource("2")
+item = ExtResource("13")
+weight = 3.0
+min_amount = 1
+max_amount = 2
+
+[sub_resource type="Resource" id="12"]
+script = ExtResource("2")
+item = ExtResource("14")
+weight = 1.0
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="13"]
+script = ExtResource("2")
+item = ExtResource("15")
+weight = 0.5
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="14"]
+script = ExtResource("2")
+item = ExtResource("16")
+weight = 0.5
+min_amount = 1
+max_amount = 1
+
+[sub_resource type="Resource" id="15"]
+script = ExtResource("2")
+item = ExtResource("17")
+weight = 0.2
+min_amount = 1
+max_amount = 1
+
+[resource]
+script = ExtResource("1")
+entries = Array[LootEntry]([SubResource("1"), SubResource("2"), SubResource("3"), SubResource("4"), SubResource("5"), SubResource("6"), SubResource("7"), SubResource("8"), SubResource("9"), SubResource("10"), SubResource("11"), SubResource("12"), SubResource("13"), SubResource("14"), SubResource("15")])

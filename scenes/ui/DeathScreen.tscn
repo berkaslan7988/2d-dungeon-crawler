@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/death_screen.gd" id="1_death"]
+
+[node name="DeathScreen" type="CanvasLayer"]
+layer = 30
+script = ExtResource("1_death")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.7)
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -110.0
+offset_right = 130.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "ÖLDÜN!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+
+[node name="HSep" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="Summary" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "Ulaşılan Kat : 1\nÖldürülen    : 0 düşman\nLevel        : 1\nKazanılan    : 💀 10 ruh"
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.78, 0.78, 0.78, 1)
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="RetryBtn" type="Button" parent="Panel/VBox/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "Tekrar Dene"
+
+[node name="MenuBtn" type="Button" parent="Panel/VBox/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "Ana Menü"
+
+[connection signal="pressed" from="Panel/VBox/Buttons/RetryBtn" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="Panel/VBox/Buttons/MenuBtn" to="." method="_on_menu_pressed"]

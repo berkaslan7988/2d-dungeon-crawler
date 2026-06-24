@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/fx/one_shot_particles.gd" id="1"]
+
+[node name="HitSpark" type="CPUParticles2D"]
+z_index = 90
+emitting = false
+amount = 7
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+script = ExtResource("1")
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 95.0
+scale_amount_min = 1.5
+scale_amount_max = 2.5
+color = Color(1, 0.95, 0.6, 1)

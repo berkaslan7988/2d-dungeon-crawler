@@ -1,0 +1,127 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/hud.gd" id="1_hud"]
+
+[node name="HUD" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_hud")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopLeft" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 170.0
+offset_bottom = 68.0
+grow_horizontal = 1
+grow_vertical = 1
+theme_override_constants/separation = 4
+
+[node name="HPRow" type="HBoxContainer" parent="Control/TopLeft"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HPBar" type="ProgressBar" parent="Control/TopLeft/HPRow"]
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="Control/TopLeft/HPRow"]
+layout_mode = 2
+text = "100/100"
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+
+[node name="XPRow" type="HBoxContainer" parent="Control/TopLeft"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="XPBar" type="ProgressBar" parent="Control/TopLeft/XPRow"]
+custom_minimum_size = Vector2(100, 7)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="XPLabel" type="Label" parent="Control/TopLeft/XPRow"]
+layout_mode = 2
+text = "Lv.1"
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.56, 0.76, 1.0, 1)
+
+[node name="WeaponRow" type="HBoxContainer" parent="Control/TopLeft"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="WeaponIcon" type="TextureRect" parent="Control/TopLeft/WeaponRow"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WeaponLabel" type="Label" parent="Control/TopLeft/WeaponRow"]
+layout_mode = 2
+text = "Silahsız"
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+
+[node name="TopRight" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -120.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = 46.0
+grow_horizontal = 0
+grow_vertical = 1
+
+[node name="FloorLabel" type="Label" parent="Control/TopRight"]
+layout_mode = 2
+text = "Kat 1"
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.7, 0.85, 0.85, 1)
+
+[node name="GoldLabel" type="Label" parent="Control/TopRight"]
+layout_mode = 2
+text = "* 0"
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.95, 0.77, 0.15, 1)
+
+[node name="ToastLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -120.0
+offset_top = 40.0
+offset_right = 120.0
+offset_bottom = 62.0
+grow_horizontal = 2
+grow_vertical = 1
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+modulate = Color(1, 1, 1, 0)

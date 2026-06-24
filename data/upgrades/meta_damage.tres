@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1_updata"]
+
+[resource]
+script = ExtResource("1_updata")
+id = &"meta_damage"
+display_name = "Kalıcı Güç"
+description = "+5 sabit hasar. Kalıcıdır, her run başında otomatik uygulanır."
+upgrade_type = 0
+value = 5.0
+weight = 10.0
+rarity = 1
+meta_cost = 70

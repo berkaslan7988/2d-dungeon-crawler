@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1_updata"]
+
+[resource]
+script = ExtResource("1_updata")
+id = &"damage_multiplier"
+display_name = "Kan Öfkesi"
+description = "+%15 hasar çarpanı. Tüm hasara uygulanır."
+upgrade_type = 1
+value = 0.15
+weight = 6.0
+rarity = 1

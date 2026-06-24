@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/weapon_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_sword.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"war_hammer"
+display_name = "Savaş Çekici"
+icon = ExtResource("2")
+description = "Ağır ve yavaş; büyük geri tepme."
+rarity = 2
+stack_size = 1
+damage = 22.0
+attack_speed = 0.6
+knockback = 90.0
+range_bonus = 4.0

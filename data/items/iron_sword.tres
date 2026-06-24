@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/weapon_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_sword.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"iron_sword"
+display_name = "Demir Kılıç"
+icon = ExtResource("2")
+description = "Güvenilir, dengeli bir kılıç."
+rarity = 1
+stack_size = 1
+damage = 12.0
+attack_speed = 1.0
+knockback = 30.0
+range_bonus = 2.0

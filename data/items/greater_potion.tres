@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ConsumableData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/consumable_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_potion.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"greater_potion"
+display_name = "Büyük İksir"
+icon = ExtResource("2")
+description = "Bol miktarda can yeniler."
+rarity = 1
+stack_size = 5
+effect = 0
+value = 50.0

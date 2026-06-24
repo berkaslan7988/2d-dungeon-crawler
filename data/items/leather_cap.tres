@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ArmorData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/armor_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_armor.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"leather_cap"
+display_name = "Deri Başlık"
+icon = ExtResource("2")
+description = "Basit kafa koruması."
+rarity = 0
+stack_size = 1
+slot = 0
+defense = 2.0
+max_health_bonus = 0.0
+move_speed_bonus = 0.0

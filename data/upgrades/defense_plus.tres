@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1_updata"]
+
+[resource]
+script = ExtResource("1_updata")
+id = &"defense_plus"
+display_name = "Taş Deri"
+description = "+10 savunma. Düşman hasarını %~9 azaltır."
+upgrade_type = 5
+value = 10.0
+weight = 8.0
+rarity = 0

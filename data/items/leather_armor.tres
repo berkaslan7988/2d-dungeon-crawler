@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ArmorData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/armor_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_armor.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"leather_armor"
+display_name = "Deri Zırh"
+icon = ExtResource("2")
+description = "Hafif ama işe yarar bir göğüslük. Savunmayı biraz artırır."
+rarity = 0
+stack_size = 1
+slot = 1
+defense = 4.0
+max_health_bonus = 10.0
+move_speed_bonus = 0.0

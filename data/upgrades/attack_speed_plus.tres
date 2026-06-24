@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1_updata"]
+
+[resource]
+script = ExtResource("1_updata")
+id = &"attack_speed_plus"
+display_name = "Çevik Eller"
+description = "+%20 saldırı hızı. Cooldown daha çabuk dolar."
+upgrade_type = 4
+value = 0.20
+weight = 7.0
+rarity = 1

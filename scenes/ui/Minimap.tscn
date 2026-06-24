@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/minimap.gd" id="1_mm"]
+
+[node name="Minimap" type="CanvasLayer"]
+layer = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 4
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -210.0
+offset_top = -80.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="MinimapDraw" type="Control" parent="MarginContainer"]
+layout_mode = 2
+script = ExtResource("1_mm")
+custom_minimum_size = Vector2(96, 64)

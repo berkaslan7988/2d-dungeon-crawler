@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1_updata"]
+
+[resource]
+script = ExtResource("1_updata")
+id = &"meta_attack_speed"
+display_name = "Kalıcı Şiddet"
+description = "+%15 saldırı hızı. Kalıcıdır, her run başında otomatik uygulanır."
+upgrade_type = 4
+value = 0.15
+weight = 10.0
+rarity = 2
+meta_cost = 90

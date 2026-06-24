@@ -1,0 +1,158 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/pause_menu.gd" id="1_pause"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_pause")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -90.0
+offset_right = 80.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "— DURAKLADI —"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 1)
+
+[node name="HSep" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="ResumeBtn" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Devam Et"
+
+[node name="MainMenuBtn" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Ana Menü"
+
+[node name="ShopBtn" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Mağaza"
+
+[node name="QuitBtn" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Çıkış"
+
+[node name="ShopPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -150.0
+offset_right = 210.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ShopPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="ShopPanel/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ShopPanel/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "— MAĞAZA —"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 1)
+
+[node name="CurrencyLabel" type="Label" parent="ShopPanel/VBox/Header"]
+layout_mode = 2
+text = "* 0"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.95, 0.77, 0.15, 1)
+
+[node name="HSep" type="HSeparator" parent="ShopPanel/VBox"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ShopPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 220)
+
+[node name="CardsGrid" type="GridContainer" parent="ShopPanel/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+
+[node name="BackBtn" type="Button" parent="ShopPanel/VBox"]
+layout_mode = 2
+text = "Geri"
+
+[node name="ConfirmPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -70.0
+offset_right = 150.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ConfirmPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="WarnLabel" type="Label" parent="ConfirmPanel/VBox"]
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+text = "Ana menüye dönülsün mü?\n\nDeğişiklikler kaydedilmeyecek; oyunu baştan oynamanız gerekecek."
+autowrap_mode = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9, 0.85, 0.7, 1)
+
+[node name="Buttons" type="HBoxContainer" parent="ConfirmPanel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 14
+
+[node name="YesBtn" type="Button" parent="ConfirmPanel/VBox/Buttons"]
+layout_mode = 2
+text = "Evet, çık"
+
+[node name="NoBtn" type="Button" parent="ConfirmPanel/VBox/Buttons"]
+layout_mode = 2
+text = "Hayır"
+
+[connection signal="pressed" from="Panel/VBox/ResumeBtn" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Panel/VBox/MainMenuBtn" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Panel/VBox/ShopBtn" to="." method="_on_shop_pressed"]
+[connection signal="pressed" from="Panel/VBox/QuitBtn" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="ShopPanel/VBox/BackBtn" to="." method="_on_shop_back_pressed"]
+[connection signal="pressed" from="ConfirmPanel/VBox/Buttons/YesBtn" to="." method="_on_confirm_yes"]
+[connection signal="pressed" from="ConfirmPanel/VBox/Buttons/NoBtn" to="." method="_on_confirm_no"]

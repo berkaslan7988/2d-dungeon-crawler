@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/weapon_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/icon_sword.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"flame_blade"
+display_name = "Alev Kılıcı"
+icon = ExtResource("2")
+description = "Efsanevi yanan çelik."
+rarity = 4
+stack_size = 1
+damage = 28.0
+attack_speed = 1.1
+knockback = 50.0
+range_bonus = 4.0

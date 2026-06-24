@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BossData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/boss_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Sessizliğin Anası Myrra"
+intro_text = "Adımların buraya kadar yankılandı. Ne yazık ki aşağıda kimse çığlıklarını duymayacak.\nGaroth zayıftı, hâlâ acıyabiliyordu. Ben merhamet bilmem."
+defeat_text = "Sessizlik... nihayet beni de aldı. Taç'ı görüyorum, kahraman...\nseni çağırıyor. Onun fısıltısına dayanabilecek misin, merak ediyorum."
+is_final = false
+sprite_tint = Color(0.6, 0.4, 0.75, 1)
+sprite_scale = 2.45
+max_health = 260.0
+move_speed = 38.0
+slam_damage = 20.0
+volley_damage = 10.0
+volley_count = 12
+summon_count = 3

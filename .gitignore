@@ -1,0 +1,10 @@
+# Godot 4+ özel
+.godot/
+/android/
+# Export edilen build'ler
+build/
+*.exe
+*.pck
+*.zip
+# OS
+.DS_Store

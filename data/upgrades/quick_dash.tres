@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"quick_dash"
+display_name = "Hızlı Atılış"
+description = "-%40 atılma beklemesi"
+rarity = 1
+upgrade_type = 7
+value = 0.4
+weight = 5.0
+meta_cost = 0

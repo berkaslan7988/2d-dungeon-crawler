@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/upgrade_data.gd" id="1_updata"]
+
+[resource]
+script = ExtResource("1_updata")
+id = &"damage_plus"
+display_name = "Keskin Kenar"
+description = "+5 sabit hasar. Her vuruş biraz daha acıtır."
+upgrade_type = 0
+value = 5.0
+weight = 10.0
+rarity = 0

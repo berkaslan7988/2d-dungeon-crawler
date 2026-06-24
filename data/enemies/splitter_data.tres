@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://resources/enemy_data.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/slime_frames.tres" id="2"]
+[ext_resource type="Resource" path="res://data/loot_tables/slime_loot_table.tres" id="3"]
+[ext_resource type="Resource" path="res://data/enemies/mini_slime_data.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Bölünen Slime"
+sprite_frames = ExtResource("2")
+sprite_tint = Color(0.4, 0.85, 1, 1)
+sprite_scale = 1.15
+max_health = 30.0
+move_speed = 32.0
+damage = 7.0
+knockback = 90.0
+attack_type = 0
+detection_range = 70.0
+attack_range = 14.0
+attack_cooldown = 1.1
+attack_active_time = 0.15
+patrol_radius = 40.0
+patrol_wait_time = 1.5
+split_into = ExtResource("4")
+split_count = 2
+xp_reward = 14
+loot_table = ExtResource("3")

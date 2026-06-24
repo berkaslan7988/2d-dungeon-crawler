@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/player_frames.tres" id="2"]
+[ext_resource type="Script" path="res://components/health_component.gd" id="3"]
+[ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4"]
+[ext_resource type="Script" path="res://components/hitbox_component.gd" id="5"]
+[ext_resource type="Script" path="res://components/shake_camera_2d.gd" id="6"]
+[ext_resource type="Shader" path="res://assets/shaders/flash.gdshader" id="7"]
+
+[sub_resource type="ShaderMaterial" id="flash_mat"]
+shader = ExtResource("7")
+shader_parameter/flash_amount = 0.0
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="2"]
+radius = 7.0
+
+[sub_resource type="CircleShape2D" id="3"]
+radius = 7.0
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("flash_mat")
+sprite_frames = ExtResource("2")
+animation = &"idle_down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("1")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+script = ExtResource("6")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3")
+max_health = 100.0
+
+[node name="HurtboxComponent" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 64
+script = ExtResource("4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+position = Vector2(0, 4)
+shape = SubResource("2")
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 16
+script = ExtResource("5")
+damage = 15.0
+knockback = 140.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("3")
+disabled = true
+
+[node name="AimPivot" type="Node2D" parent="."]
+
+[node name="WeaponIndicator" type="Polygon2D" parent="AimPivot"]
+polygon = PackedVector2Array(4, -2, 13, 0, 4, 2)
+color = Color(0.85, 0.85, 0.92, 0.95)
+
+[node name="SlashEffect" type="Polygon2D" parent="AimPivot"]
+visible = false
+polygon = PackedVector2Array(6, -9, 20, -3, 22, 0, 20, 3, 6, 9, 11, 0)
+color = Color(1, 1, 1, 0.85)
