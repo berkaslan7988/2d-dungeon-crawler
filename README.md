@@ -1,84 +1,101 @@
+<div align="center">
+
 # 🗡️ Güneşsiz Taç — 2D Dungeon Crawler
 
-> Top-down, roguelite esintili, prosedürel bir zindan sürünücüsü. **Godot 4.7 (GL Compatibility)** · **GDScript**.
+**Procedural roguelite dungeon crawler · Godot 4.7 · GDScript**
+*Prosedürel, roguelite esintili top-down zindan sürünücüsü*
 
-Bir zamanlar güneşin hiç batmadığı **Aethelgard** krallığı, Kral'ın yeraltındaki *Güneşsiz Taç*'ı başına geçirmesiyle karanlığa gömüldü. Küllerden doğan son alev olarak, üç Muhafız'ın koruduğu dokuz kata in ve laneti kır — ya da karanlığın bir parçası ol.
-
----
-
-## ✨ Özellikler
-
-- **Prosedürel zindan üretimi** — her run farklı ama her zaman gezilebilir (flood-fill bağlanabilirlik garantisi, seed destekli).
-- **Akıcı dövüş** — fareyle nişan alma, kılıç saldırısı, dash, i-frame + knockback, hit-flash.
-- **6 düşman türü** — slime, hızlı yarasa, bölünen slime, menzilli büyücü, tank ve mini slime; kat ilerledikçe ölçeklenen zorluk.
-- **3 boss + hikaye** — Garoth (kat 3), Myrra (kat 6), Kral Vorlak (kat 9, final). Telegraph'lı çok fazlı saldırılar, savaş öncesi/sonrası diyaloglar.
-- **Loot & envanter** — 17 eşya (silah/zırh/iksir), rarity sistemi, kuşanım, hazine sandıkları, fazlalığı meta paraya çevirme.
-- **İlerleme** — XP/level, level-up'ta 3 karttan upgrade seçimi (22 upgrade), kalıcı meta para + mağaza, JSON save/load.
-- **Görsel & ses cila** — ekran sarsıntısı, hit-stop, partiküller, uçan hasar sayıları, SFX/müzik (AudioManager).
-- **Tam UI** — HUD, minimap (fog-of-war), pause, envanter, upgrade ekranı, ölüm/zafer özeti, ana menü.
+</div>
 
 ---
-
-## 🎮 Kontroller
-
-| Eylem | Tuş |
-|-------|-----|
-| Hareket | `WASD` / Yön tuşları |
-| Nişan | Fare |
-| Saldırı | `F` / Sol tık |
-| Atılma (dash) | `Shift` |
-| Etkileşim | `Q` |
-| Envanter | `E` |
-| Duraklat | `Esc` |
-
-Gamepad de desteklenir (sol çubuk hareket, butonlar eylemler).
-
----
-
-## 🚀 Nasıl Çalıştırılır
-
-1. **Godot 4.7** (stable, GL Compatibility) indir: <https://godotengine.org>
-2. Bu depoyu klonla veya indir.
-3. Godot'ta **Import** → `project.godot` dosyasını seç → **Aç**.
-4. **Play (F5)** ile çalıştır. Oyun ana menüyle, tam ekran açılır.
-
-> **Ses dosyaları:** SFX/müzik `assets/audio/sfx/` ve `assets/audio/music/` altına beklenir (bkz. `FAZ9_SES_REHBERI.md`). Eksikse oyun sessiz çalışır, çökmez.
-
----
-
-## 🗂️ Proje Yapısı
 
 ```
-autoload/      Singleton'lar: EventBus, GameManager, RunManager, SaveManager, AudioManager, Juice
-components/     Yeniden kullanılabilir: Health/Hitbox/Hurtbox/Stats/Inventory/Equipment, ShakeCamera
-resources/      Veri sınıfları: ItemData, WeaponData, EnemyData, BossData, UpgradeData, LootTable...
-data/           İçerik (.tres): düşmanlar, bosslar, eşyalar, upgrade'ler, loot tabloları
-systems/        DungeonGenerator (oda + koridor + bağlanabilirlik)
-scenes/
-  player/       Player
-  enemies/      Enemy (FSM), Boss, Projectile
-  items/        Pickup, Chest
-  world/        Main, DungeonScene
-  ui/           HUD, Minimap, Pause, Inventory, Upgrade, Chest, Dialogue, Death, MainMenu
-  fx/           DamageNumber, HitSpark, DeathPuff
-assets/         Sprite, tileset, shader, (ses)
-themes/         dungeon_theme.tres (karanlık UI teması)
+Aethelgard once shone under a sun that never set —
+until the King wore the Sunless Crown buried in the deep.
+
+Bir zamanlar Aethelgard krallığı hiç batmayan bir güneşin altında parlardı —
+ta ki Kral, derinlerdeki Güneşsiz Taç'ı başına geçirene dek.
 ```
 
-**Mimari ilkeler:** veri/koddan ayrı (`Resource` + `.tres`), sinyalle gevşek bağ (`EventBus`), bileşen deseni, sabitler tek yerde (`Constants`).
+You are the last ember born from the ashes. Descend the nine floors guarded by three Wardens and break the curse — or become part of the dark.
+Küllerden doğan son alevsin. Üç Muhafız'ın koruduğu dokuz kata in ve laneti kır — ya da karanlığın bir parçası ol.
 
 ---
 
-## 🙏 Krediler
+## ✨ Features / Özellikler
 
-- **Motor:** [Godot Engine](https://godotengine.org) (MIT).
-- **Sprite/tileset:** yer tutucu (placeholder) görseller. Nihai sanat eklenecek.
-- **Ses:** kullanıcı tarafından eklenen ücretsiz kaynaklar. CC0 için [Kenney.nl](https://kenney.nl), CC-BY için ilgili sanatçılara teşekkürler (kullanılan parçalar burada listelenmeli).
-
-> Üçüncü taraf varlık kullanırsan lisanslarını ve sanatçı adlarını bu bölüme eklemeyi unutma.
+| Feature / Özellik | Details / Detaylar |
+|-------------------|--------------------|
+| 🎲 **Procedural / Prosedürel** | Room+corridor generator, seed support, **flood-fill connectivity guarantee** / Oda+koridor üretici, seed desteği, flood-fill bağlanabilirlik garantisi |
+| ⚔️ **Combat / Dövüş** | Component-based Hitbox/Hurtbox, mouse-aim, dash, i-frames, knockback, hit-flash / Bileşen tabanlı dövüş, fareyle nişan, dash, i-frame |
+| 🤖 **Enemy AI / Düşman AI** | FSM (idle/patrol/chase/attack), 6 types incl. ranged, splitting, tank / FSM tabanlı 6 düşman türü (menzilli, bölünen, tank) |
+| 👑 **Bosses & Story / Boss & Hikaye** | 3 multi-phase bosses (floors 3/6/9), telegraphed attacks, pre/post-fight dialogue / 3 çok fazlı boss, telegraph'lı saldırı + diyaloglar |
+| 🎒 **Systems / Sistemler** | Loot, inventory, equipment, 22 upgrades, XP/level, meta progression, JSON save / Loot, envanter, ekipman, 22 upgrade, meta ilerleme, save |
+| ✨ **Juice & UI** | Screen shake, hit-stop, particles, damage numbers, shaders, object pooling, full menu/HUD/minimap / Sarsıntı, hit-stop, partikül, shader, havuzlama, tam UI |
 
 ---
 
-## 📜 Lisans
+## 🎮 Controls / Kontroller
 
-Kod **MIT Lisansı** altındadır — bkz. [LICENSE](LICENSE). Üçüncü taraf varlıkların lisansları ayrıca geçerlidir.
+| Action / Eylem | Key / Tuş |
+|----------------|-----------|
+| Move / Hareket | `WASD` · Arrows / Yön tuşları |
+| Aim / Nişan | Mouse / Fare |
+| Attack / Saldırı | `F` · Left click / Sol tık |
+| Dash / Atılma | `Shift` |
+| Interact / Etkileşim | `Q` |
+| Inventory / Envanter | `E` |
+| Pause / Duraklat | `Esc` |
+
+Gamepad supported / Gamepad desteklenir.
+
+---
+
+## 🚀 Run / Çalıştırma
+
+1. Get **Godot 4.7** (GL Compatibility): <https://godotengine.org>
+2. Clone/download this repo · Bu depoyu klonla/indir.
+3. In Godot: **Import** → select `project.godot` → **Open** / Godot'ta İçe Aktar → `project.godot` seç → Aç.
+4. Press **Play (F5)** / **Oyun (F5)** ile çalıştır.
+
+> Audio lives in `assets/audio/` (see `FAZ9_SES_REHBERI.md`). Missing files = silent, no crash.
+> Sesler `assets/audio/` altında; eksikse oyun sessiz çalışır, çökmez.
+
+---
+
+## 🧱 Architecture / Mimari
+
+Data-driven (`Resource` + `.tres`), signal-based loose coupling (`EventBus`), reusable components, single-source constants.
+Veri/koddan ayrık (`Resource` + `.tres`), sinyalle gevşek bağ (`EventBus`), yeniden kullanılabilir bileşenler, tek-kaynak sabitler.
+
+```
+autoload/    EventBus · GameManager · RunManager · SaveManager · AudioManager · Juice
+components/   Health · Hitbox · Hurtbox · Stats · Inventory · Equipment · ShakeCamera
+resources/    ItemData · WeaponData · EnemyData · BossData · UpgradeData · LootTable
+systems/      DungeonGenerator (rooms + corridors + connectivity)
+scenes/       player · enemies (Enemy/Boss/Projectile) · items · world · ui · fx
+data/         enemies · bosses · items · upgrades · loot_tables  (.tres content)
+```
+
+---
+
+## 🙏 Credits / Krediler
+
+- **Engine / Motor:** [Godot](https://godotengine.org) (MIT)
+- **Sprites/tiles:** placeholder art / yer tutucu görseller
+- **Audio / Ses:** free CC0 sources ([Kenney.nl](https://kenney.nl)) + attributed CC-BY tracks / ücretsiz CC0 + atıflı CC-BY parçalar
+
+> List any third-party assets and their licenses here. / Üçüncü taraf varlıkları ve lisanslarını buraya ekle.
+
+---
+
+## 📜 License / Lisans
+
+Code under **MIT** — see [LICENSE](LICENSE). Third-party assets keep their own licenses.
+Kod **MIT** altında — bkz. [LICENSE](LICENSE). Üçüncü taraf varlıklar kendi lisanslarındadır.
+
+<div align="center">
+
+*"Break the curse, or become part of the dark." / "Laneti kır, ya da karanlığın bir parçası ol."*
+
+</div>
