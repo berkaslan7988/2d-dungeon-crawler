@@ -87,7 +87,7 @@ Kod **MIT** altında — bkz. [LICENSE](LICENSE). Üçüncü taraf varlıklar ke
 
 <div align="center">
 
-# 🗡️ Güneşsiz Taç — 2D Dungeon Crawler
+# 🗡️ Sunless Crown — 2D Dungeon Crawler
 
 **Procedural roguelite dungeon crawler · Godot 4.7 · GDScript**
 
