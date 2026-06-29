@@ -70,8 +70,6 @@ data/        enemies · bosses · items · upgrades · loot_tables  (.tres conte
 - **Görseller:** yer tutucu görseller
 - **Ses:** ücretsiz CC0 kaynaklar ([Kenney.nl](https://kenney.nl)) + atıflı CC-BY parçalar
 
-> Üçüncü taraf varlıkları ve lisanslarını buraya ekle.
-
 ## 📜 Lisans
 
 Kod **MIT** altında — bkz. [LICENSE](LICENSE). Üçüncü taraf varlıklar kendi lisanslarındadır.
@@ -156,8 +154,6 @@ data/        enemies · bosses · items · upgrades · loot_tables  (.tres conte
 - **Engine:** [Godot](https://godotengine.org) (MIT)
 - **Sprites/tiles:** placeholder art
 - **Audio:** free CC0 sources ([Kenney.nl](https://kenney.nl)) + attributed CC-BY tracks
-
-> List any third-party assets and their licenses here.
 
 ## 📜 License
 
