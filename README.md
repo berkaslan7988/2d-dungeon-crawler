@@ -4,6 +4,8 @@
 
 **Prosedürel, roguelite esintili top-down zindan sürünücüsü · Godot 4.7 · GDScript**
 
+<img width="1920" height="1080" alt="resim" src="https://github.com/user-attachments/assets/38a77045-e2b1-462c-be24-93799bea31ea" />
+
 </div>
 
 ---
