@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/items/chest.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/chest_closed.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/chest.png" id="2"]
 
+[ext_resource type="Material" path="res://assets/shaders/lit_sprite.tres" id="lit"]
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(20, 12)
 
@@ -15,6 +16,8 @@ collision_mask = 0
 script = ExtResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("lit")
+offset = Vector2(0, -3)
 texture = ExtResource("2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

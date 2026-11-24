@@ -8,20 +8,21 @@ extends Resource
 enum ItemType { CONSUMABLE, WEAPON, ARMOR, MATERIAL }
 enum Rarity { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY }
 
+## Iron, bronze, gold, then arcane and ember for the two highest tiers.
 const RARITY_COLORS := {
-	Rarity.COMMON: Color.WHITE,
-	Rarity.UNCOMMON: Color("4caf50"),
-	Rarity.RARE: Color("2196f3"),
-	Rarity.EPIC: Color("9c27b0"),
-	Rarity.LEGENDARY: Color("ff9800"),
+	Rarity.COMMON: Color("8f90a6"),
+	Rarity.UNCOMMON: Color("9c6a3e"),
+	Rarity.RARE: Color("f5b84a"),
+	Rarity.EPIC: Color("b79cf2"),
+	Rarity.LEGENDARY: Color("ec7a2a"),
 }
 
 const RARITY_NAMES := {
-	Rarity.COMMON: "Sıradan",
-	Rarity.UNCOMMON: "Nadide",
-	Rarity.RARE: "Nadir",
-	Rarity.EPIC: "Epik",
-	Rarity.LEGENDARY: "Efsanevi",
+	Rarity.COMMON: "RARITY_COMMON",
+	Rarity.UNCOMMON: "RARITY_UNCOMMON",
+	Rarity.RARE: "RARITY_RARE",
+	Rarity.EPIC: "RARITY_EPIC",
+	Rarity.LEGENDARY: "RARITY_LEGENDARY",
 }
 
 ## Faz 8 UX: "fazlalık eşyaların meta paraya dönüştürülebilmesi" — rarity'ye
@@ -48,7 +49,21 @@ func get_color() -> Color:
 
 
 func get_rarity_name() -> String:
-	return RARITY_NAMES[rarity]
+	return TranslationServer.translate(RARITY_NAMES[rarity])
+
+
+## Localised name (ITEM_<ID>_NAME), falling back to display_name.
+func get_name_text() -> String:
+	return _tr_or("ITEM_%s_NAME" % String(id).to_upper(), display_name)
+
+
+func get_desc_text() -> String:
+	return _tr_or("ITEM_%s_DESC" % String(id).to_upper(), description)
+
+
+static func _tr_or(key: String, fallback: String) -> String:
+	var s := TranslationServer.translate(key)
+	return fallback if s == key else s
 
 
 ## Faz 8 UX: bu eşyanın bir biriminin kalıcı para karşılığı (envanterde

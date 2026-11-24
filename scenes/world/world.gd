@@ -7,7 +7,7 @@ const ROOM_WIDTH: int = 14
 const ROOM_HEIGHT: int = 10
 
 const FLOOR_ATLAS_COORDS := Vector2i(0, 0)
-const WALL_ATLAS_COORDS := Vector2i(1, 0)
+const WALL_ATLAS_COORDS := Vector2i(0, 1)
 const TILESET_SOURCE_ID: int = 0
 
 @onready var floor_layer: TileMapLayer = $FloorLayer

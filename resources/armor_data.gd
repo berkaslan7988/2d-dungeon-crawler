@@ -17,9 +17,9 @@ func _init() -> void:
 
 
 func get_stat_lines() -> Array[String]:
-	var lines: Array[String] = ["Savunma: +%.0f" % defense]
+	var lines: Array[String] = [TranslationServer.translate("STAT_DEFENSE") % defense]
 	if max_health_bonus != 0.0:
-		lines.append("Can: +%.0f" % max_health_bonus)
+		lines.append(TranslationServer.translate("STAT_LIFE") % max_health_bonus)
 	if move_speed_bonus != 0.0:
-		lines.append("Hız: +%.0f" % move_speed_bonus)
+		lines.append(TranslationServer.translate("STAT_SPEED") % move_speed_bonus)
 	return lines

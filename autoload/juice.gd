@@ -11,9 +11,9 @@ extends Node
 const DAMAGE_NUMBER: PackedScene = preload("res://scenes/fx/DamageNumber.tscn")
 const HIT_SPARK: PackedScene = preload("res://scenes/fx/HitSpark.tscn")
 
-const COLOR_ENEMY_DMG := Color(1.0, 0.96, 0.85)   ## oyuncu→düşman (açık)
-const COLOR_PLAYER_DMG := Color(0.95, 0.35, 0.3)  ## düşman→oyuncu (kırmızı)
-const COLOR_CRIT := Color(1.0, 0.7, 0.15)         ## kritik (turuncu)
+const COLOR_ENEMY_DMG := Color("efe8d6")   ## oyuncu→düşman (açık)
+const COLOR_PLAYER_DMG := Color("f07a86")  ## düşman→oyuncu (kırmızı)
+const COLOR_CRIT := Color("ffe39a")         ## kritik (turuncu)
 
 ## Faz 11 (opt): damage number havuzu (ön-ısıtmalı, yeniden kullanılır).
 const DMG_POOL_SIZE := 24

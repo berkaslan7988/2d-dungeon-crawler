@@ -15,9 +15,20 @@ const ROOM_MIN: int = 5
 const ROOM_MAX: int = 9
 const MAX_GENERATION_ATTEMPTS: int = 20
 
-const FLOOR_ATLAS_COORDS := Vector2i(0, 0)
-const WALL_ATLAS_COORDS := Vector2i(1, 0)
+## dungeon_tiles.png (tools/art/build.py): row 0 = four floors + stairs,
+## row 1 = wall tops by floor-neighbour mask (N=1, E=2, W=4),
+## row 2 = wall faces by open side (E=1, W=2).
+const FLOOR_VARIANTS: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0)]
+const STAIRS_ATLAS := Vector2i(4, 0)
 const TILESET_SOURCE_ID: int = 0
+
+const BRAZIER_SCENE: PackedScene = preload("res://scenes/props/Brazier.tscn")
+const LIT_MATERIAL: Material = preload("res://assets/shaders/lit_sprite.tres")
+const DECALS: Array[Texture2D] = [
+	preload("res://assets/sprites/props/skull.png"),
+	preload("res://assets/sprites/props/bones.png"),
+	preload("res://assets/sprites/props/rubble.png"),
+]
 
 const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/Enemy.tscn")
 const BOSS_SCENE: PackedScene = preload("res://scenes/enemies/Boss.tscn")
@@ -67,6 +78,9 @@ var _clear_check_accum: float = 0.0
 @onready var markers: Node2D = $Markers
 @onready var player: Node2D = $Entities/Player
 @onready var exit_marker: Area2D = $Markers/ExitMarker
+@onready var decals: Node2D = $Decals
+
+var _exit_light: LightSource = null
 
 
 func _ready() -> void:
@@ -78,8 +92,10 @@ func _ready() -> void:
 func generate(seed_value: int) -> void:
 	_generate_valid_grid(seed_value)
 	_paint_grid()
+	LightManager.setup_fog(Vector2i(generator.width, generator.height), floor_layer.global_position)
 	_place_player()
 	_place_exit()
+	_place_props()
 	_place_spawn_markers()
 	_spawn_enemies()
 	_spawn_chest()
@@ -115,8 +131,11 @@ func _process(delta: float) -> void:
 
 func _open_exit(announce: bool) -> void:
 	_floor_cleared = true
+	## The way down wakes up: the stairs glow brighter.
+	if _exit_light != null:
+		create_tween().tween_property(_exit_light, "intensity", 3.4, 0.6)
 	if announce:
-		EventBus.hud_toast.emit("Kat temizlendi — çıkışa ilerle!")
+		EventBus.hud_toast.emit(tr("TOAST_FLOOR_CLEARED"))
 	## Boss çıkışın üstünde durduğundan, oyuncu temizlenince zaten çıkışta
 	## olabilir (body_entered tetiklenmez). Bu durumu elle yakala.
 	if not _is_final_boss_floor:
@@ -147,10 +166,40 @@ func _paint_grid() -> void:
 			var cell := Vector2i(x, y)
 			match generator.grid[y][x]:
 				DungeonGenerator.FLOOR:
-					floor_layer.set_cell(cell, TILESET_SOURCE_ID, FLOOR_ATLAS_COORDS)
+					floor_layer.set_cell(cell, TILESET_SOURCE_ID, _floor_variant(cell))
 				DungeonGenerator.WALL:
 					if _touches_floor(cell):
-						wall_layer.set_cell(cell, TILESET_SOURCE_ID, WALL_ATLAS_COORDS)
+						wall_layer.set_cell(cell, TILESET_SOURCE_ID, _wall_atlas(cell))
+
+
+## Mostly plain stone, now and then a cracked or sunken slab.
+func _floor_variant(cell: Vector2i) -> Vector2i:
+	var h := absi((cell.x * 73856093) ^ (cell.y * 19349663)) % 100
+	if h < 64:
+		return FLOOR_VARIANTS[0]
+	if h < 76:
+		return FLOOR_VARIANTS[1]
+	if h < 88:
+		return FLOOR_VARIANTS[2]
+	return FLOOR_VARIANTS[3]
+
+
+## A wall with floor below it shows its brick face (3/4 view); any other
+## wall is a dark top with a lit rim on the sides that border floor.
+func _wall_atlas(cell: Vector2i) -> Vector2i:
+	if _is_floor(cell + Vector2i.DOWN):
+		var face := (1 if _is_floor(cell + Vector2i.RIGHT) else 0) | (2 if _is_floor(cell + Vector2i.LEFT) else 0)
+		return Vector2i(face, 2)
+	var top := (1 if _is_floor(cell + Vector2i.UP) else 0) \
+			| (2 if _is_floor(cell + Vector2i.RIGHT) else 0) \
+			| (4 if _is_floor(cell + Vector2i.LEFT) else 0)
+	return Vector2i(top, 1)
+
+
+func _is_floor(cell: Vector2i) -> bool:
+	if cell.x < 0 or cell.y < 0 or cell.x >= generator.width or cell.y >= generator.height:
+		return false
+	return generator.grid[cell.y][cell.x] == DungeonGenerator.FLOOR
 
 
 ## Sadece zemine değen duvarları döşe; haritanın görünmeyen iç kısımlarını
@@ -183,6 +232,52 @@ func _place_exit() -> void:
 			farthest_room = room
 
 	exit_marker.global_position = _cell_to_world(farthest_room.get_center())
+	## Stairs down, with a faint ember glow rising from below.
+	floor_layer.set_cell(farthest_room.get_center(), TILESET_SOURCE_ID, STAIRS_ATLAS)
+	_exit_light = LightSource.new()
+	_exit_light.radius = 44.0
+	_exit_light.intensity = 2.2
+	_exit_light.flicker = 0.25
+	_exit_light.fog_gated = true
+	exit_marker.add_child(_exit_light)
+
+
+## Braziers against the top wall of rooms, and a few bones and stones.
+func _place_props() -> void:
+	for child in decals.get_children():
+		child.queue_free()
+	for i in generator.rooms.size():
+		var room: Rect2i = generator.rooms[i]
+		if room.size.x < 5:
+			continue
+		if i != 0 and generator.rng.randf() > 0.6:
+			continue
+		var sides := [room.position.x + 1, room.end.x - 2]
+		if generator.rng.randf() < 0.5:
+			sides.reverse()
+		for x in sides:
+			var cell := Vector2i(x, room.position.y)
+			if not _is_floor(cell) or _is_floor(cell + Vector2i.UP):
+				continue
+			var brazier: Node2D = BRAZIER_SCENE.instantiate()
+			brazier.position = _cell_to_world(cell) + Vector2(0, 2)
+			entities.add_child(brazier)
+			break
+	var count := generator.rng.randi_range(6, 11)
+	for n in count:
+		var room: Rect2i = generator.rooms[generator.rng.randi_range(0, generator.rooms.size() - 1)]
+		var cell := Vector2i(
+			generator.rng.randi_range(room.position.x, room.end.x - 1),
+			generator.rng.randi_range(room.position.y + 1, room.end.y - 1))
+		if not _is_floor(cell) or cell == room.get_center():
+			continue
+		var decal := Sprite2D.new()
+		decal.texture = DECALS[generator.rng.randi_range(0, DECALS.size() - 1)]
+		decal.material = LIT_MATERIAL
+		decal.position = _cell_to_world(cell) + Vector2(
+			generator.rng.randf_range(-4.0, 4.0), generator.rng.randf_range(-4.0, 4.0)).round()
+		decal.flip_h = generator.rng.randf() < 0.5
+		decals.add_child(decal)
 
 
 func _place_spawn_markers() -> void:
@@ -312,7 +407,7 @@ func _on_exit_marker_body_entered(body: Node) -> void:
 		return
 	## Özellik 1: kat temizlenmeden geçiş yok.
 	if not _floor_cleared:
-		EventBus.hud_toast.emit("Önce tüm düşmanları temizle!")
+		EventBus.hud_toast.emit(tr("TOAST_CLEAR_FIRST"))
 		return
 	## Final boss katı: ilerleme yok; zafer, boss yenilgi diyaloğu sonrası gelir.
 	if _is_final_boss_floor:

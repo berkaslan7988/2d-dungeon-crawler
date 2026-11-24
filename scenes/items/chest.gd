@@ -8,6 +8,7 @@ const MIN_ROLLS: int = 2
 const MAX_ROLLS: int = 3
 ## Bazı sandıklardan run-içi yetenek kartı da çıkar (level-up havuzundan).
 const UPGRADE_CHANCE: float = 0.4
+const OPEN_TEXTURE: Texture2D = preload("res://assets/sprites/props/chest_open.png")
 
 @export var loot_table: LootTable
 
@@ -33,7 +34,7 @@ func _on_zone_body_entered(body: Node) -> void:
 
 func _open() -> void:
 	_opened = true
-	sprite.modulate = Color(0.6, 0.55, 0.5)
+	sprite.texture = OPEN_TEXTURE
 	EventBus.sfx_requested.emit(&"chest")
 
 	## Eşyaları topla (birkaç bağımsız roll → "dolu sandık" hissi).

@@ -1,15 +1,19 @@
-[gd_resource type="Resource" script_class="BossData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="BossData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/boss_data.gd" id="1"]
 
+[ext_resource type="SpriteFrames" path="res://assets/sprites/wardens/garoth_frames.tres" id="frames"]
+
 [resource]
 script = ExtResource("1")
+key = "GAROTH"
 display_name = "Kırık Muhafız Garoth"
 intro_text = "Geri dön, küçük alev. Bu eşiğin ardında yalnızca daha derin bir karanlık var.\nKral bana bu kapıyı korumayı emretti... ve ben hâlâ itaat ediyorum — etim çürürken bile."
 defeat_text = "Sonunda... zincirlerim kırıldı. Teşekkür ederim, ölümlü.\nAma aşağıdakiler benim kadar merhametli değil. Myrra'nın sessizliği seni bekliyor."
 is_final = false
-sprite_tint = Color(0.45, 0.55, 0.45, 1)
-sprite_scale = 2.2
+sprite_frames = ExtResource("frames")
+sprite_tint = Color(1, 1, 1, 1)
+sprite_scale = 1.0
 max_health = 180.0
 move_speed = 30.0
 slam_damage = 18.0

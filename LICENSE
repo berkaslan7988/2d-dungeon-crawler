@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 berk
+Copyright (c) 2026 Berk Talha Aslan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,6 @@ SOFTWARE.
 
 ---
 
-NOT: Bu lisans yalnızca bu depodaki KODU kapsar. Üçüncü taraf varlıklar
-(sprite, ses, müzik, font vb.) kendi lisansları altındadır; kullanılan her
-varlığın lisansı README'nin "Krediler" bölümünde belirtilmelidir.
+This licence covers the code and the art in this repository (the sprites,
+tiles and icons are drawn in tools/art). Fonts and audio made by others keep
+their own licences; see THIRD-PARTY.md.

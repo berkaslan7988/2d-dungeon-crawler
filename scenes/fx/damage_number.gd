@@ -21,7 +21,7 @@ func popup(amount: float, is_crit: bool, color: Color) -> void:
 	modulate.a = 1.0
 	label.text = str(int(round(amount))) + ("!" if is_crit else "")
 	label.modulate = color
-	label.add_theme_font_size_override("font_size", 14 if is_crit else 9)
+	label.add_theme_font_size_override("font_size", 16 if is_crit else 12)
 	scale = Vector2.ONE * (1.35 if is_crit else 1.0)
 
 	var start_pos := position

@@ -8,3 +8,8 @@ build/
 *.zip
 # OS
 .DS_Store
+
+# Python
+__pycache__/
+*.pyc
+tools/art/out/

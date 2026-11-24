@@ -15,7 +15,7 @@ func _init() -> void:
 
 func get_stat_lines() -> Array[String]:
 	return [
-		"Hasar: +%.0f" % damage,
-		"Saldırı Hızı: x%.2f" % attack_speed,
-		"Geri Tepme: +%.0f" % knockback,
+		TranslationServer.translate("STAT_DAMAGE") % damage,
+		TranslationServer.translate("STAT_ATTACK_SPEED") % attack_speed,
+		TranslationServer.translate("STAT_KNOCKBACK") % knockback,
 	]

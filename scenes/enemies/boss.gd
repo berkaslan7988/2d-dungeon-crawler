@@ -67,8 +67,19 @@ func _ready() -> void:
 	health.died.connect(_on_died)
 
 	_setup_flash()
+	if data != null and data.sprite_frames != null:
+		sprite.sprite_frames = data.sprite_frames
+		sprite.play("idle")
 	sprite.scale = _base_scale
 	sprite.modulate = _tint
+	add_to_group(&"boss")
+	## The Warden's crown / visor gives off a little light of its own.
+	var glow := LightSource.new()
+	glow.radius = 72.0
+	glow.intensity = 2.4
+	glow.flicker = 0.15
+	glow.position = Vector2(0, -12)
+	add_child(glow)
 
 	if player == null:
 		player = get_tree().get_first_node_in_group(Constants.GROUP_PLAYER)
@@ -135,7 +146,7 @@ func _update_phase() -> void:
 	if phase == 1 and health.current_health <= health.max_health * 0.5:
 		phase = 2
 		move_speed *= 1.35
-		sprite.modulate = Color(1.0, 0.2, 0.25, 1)
+		sprite.modulate = Color(1.0, 0.72, 0.72, 1)
 		_flash()  ## faz geçiş vurgusu
 
 
@@ -317,6 +328,7 @@ func _setup_flash() -> void:
 	_flash_mat = ShaderMaterial.new()
 	_flash_mat.shader = FLASH_SHADER
 	_flash_mat.set_shader_parameter("flash_amount", 0.0)
+	_flash_mat.set_shader_parameter("feet_offset", 18.0)
 	sprite.material = _flash_mat
 
 

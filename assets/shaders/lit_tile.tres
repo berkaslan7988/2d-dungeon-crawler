@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/lit_tile.gdshader" id="1"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/ramp_stone.png" id="2"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/ramp = ExtResource("2")

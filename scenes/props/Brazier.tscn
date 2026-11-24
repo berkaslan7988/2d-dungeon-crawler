@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="SpriteFrames" path="res://assets/sprites/props/brazier_frames.tres" id="1"]
+[ext_resource type="Material" path="res://assets/shaders/lit_sprite.tres" id="2"]
+[ext_resource type="Script" path="res://components/light_source.gd" id="3"]
+
+[node name="Brazier" type="Node2D"]
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+material = ExtResource("2")
+position = Vector2(0, -8)
+sprite_frames = ExtResource("1")
+animation = &"burn"
+autoplay = "burn"
+
+[node name="Light" type="Node2D" parent="."]
+position = Vector2(0, -12)
+script = ExtResource("3")
+radius = 88.0
+intensity = 3.6
+flicker = 0.3
+fog_gated = true

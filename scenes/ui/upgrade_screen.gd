@@ -1,154 +1,162 @@
-## UpgradeScreen — level-up ekranı.
-## EventBus.player_leveled_up sinyali tetiklenince açılır, oyunu durdurur,
-## 3 upgrade kartı sunar. Oyuncu seçim yapınca kapanır, oyun devam eder.
-##
-## Bu CanvasLayer (layer=10) Faz 8'deki UILayer'a taşınacak.
-## Şimdilik Main sahnesi veya DungeonScene'e child olarak ekle:
-##   var upgrade_screen = preload("res://scenes/ui/UpgradeScreen.tscn").instantiate()
-##   add_child(upgrade_screen)
-##
-## process_mode = ALWAYS — oyun dursa bile bu node çalışmaya devam eder.
+## UpgradeScreen — level up: the run pauses and three boons are offered.
+## Cards are framed in their rarity's metal (iron, bronze, gold); 1/2/3,
+## arrows + Enter or a click picks one.
 extends CanvasLayer
 
-## Kart başına arka plan rengi (rarity'e göre seçilir).
-const RARITY_BG: Dictionary = {
-	UpgradeData.Rarity.COMMON:   Color("1a1a2e"),
-	UpgradeData.Rarity.UNCOMMON: Color("0d2818"),
-	UpgradeData.Rarity.RARE:     Color("0a1a35"),
-}
+const K = preload("res://scenes/ui/ui_kit.gd")
+const CARD := Vector2(132, 172)
 
-const CARD_MIN_SIZE := Vector2(140, 180)
-
-@onready var cards_row: HBoxContainer = $CenterContainer/CardsRow
-@onready var title_label: Label = $CenterContainer/Title
-@onready var center_container: VBoxContainer = $CenterContainer
-
+var _root: Control
+var _title: Label
+var _cards: HBoxContainer
+var _carets: HBoxContainer
 var _current_choices: Array[UpgradeData] = []
 
 
 func _ready() -> void:
+	layer = 10
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	for c in get_children():
+		c.queue_free()
+	_build()
 	hide()
 	EventBus.player_leveled_up.connect(_on_player_leveled_up)
 
 
-func _on_player_leveled_up(new_level: int) -> void:
-	title_label.text = "SEVİYE %d!" % new_level
-	_current_choices = RunManager.offer_upgrades()
+func _build() -> void:
+	_root = Control.new()
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_root)
+	_root.add_child(K.scrim(0.66))
+	_title = K.title("", 40)
+	_place(_title, 34)
+	var sub := K.shadowed(K.label(tr("BOON_CHOOSE"), 11, K.BONE))
+	sub.name = "Sub"
+	_place(sub, 82)
+	_carets = K.hbox(20)
+	_carets.alignment = BoxContainer.ALIGNMENT_CENTER
+	_place(_carets, 104)
+	_cards = K.hbox(20)
+	_cards.alignment = BoxContainer.ALIGNMENT_CENTER
+	_place(_cards, 116)
+	var hint := K.shadowed(K.num(tr("BOON_HINT"), 11, K.ASH_LT))
+	hint.name = "Hint"
+	_place(hint, 306)
 
+
+func _place(c: Control, top: float) -> void:
+	c.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	c.offset_top = top
+	if c is Label:
+		(c as Label).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_root.add_child(c)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible or _current_choices.is_empty():
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		var idx := [KEY_1, KEY_2, KEY_3].find(event.keycode)
+		if idx != -1 and idx < _current_choices.size():
+			_on_card_selected(_current_choices[idx])
+			get_viewport().set_input_as_handled()
+
+
+func _on_player_leveled_up(new_level: int) -> void:
+	_current_choices = RunManager.offer_upgrades()
 	if _current_choices.is_empty():
-		## Upgrade pool yoksa veya boşsa ekranı açma.
 		push_warning("UpgradeScreen: upgrade_pool boş, ekran açılmıyor.")
 		return
-
+	_title.text = tr("BOON_LEVEL") % new_level
+	(_root.find_child("Sub", true, false) as Label).text = tr("BOON_CHOOSE")
+	(_root.find_child("Hint", true, false) as Label).text = tr("BOON_HINT")
 	_build_cards()
 	_open()
 
 
-## --- Kart oluşturma ---
-
 func _build_cards() -> void:
-	## Eski kartları temizle.
-	for child in cards_row.get_children():
-		child.queue_free()
-
-	for upgrade in _current_choices:
-		var card := _make_card(upgrade)
-		cards_row.add_child(card)
-
-
-func _make_card(upgrade: UpgradeData) -> PanelContainer:
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = CARD_MIN_SIZE
-
-	## Arka plan stili (rarity rengi).
-	var style := StyleBoxFlat.new()
-	style.bg_color = RARITY_BG.get(upgrade.rarity, Color("1a1a2e"))
-	style.border_color = upgrade.get_color()
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(6)
-	panel.add_theme_stylebox_override("panel", style)
-
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 6)
-	panel.add_child(vbox)
-
-	## Rarity etiket.
-	var rarity_names := ["COMMON", "UNCOMMON", "RARE"]
-	var rarity_label := Label.new()
-	rarity_label.text = rarity_names[upgrade.rarity]
-	rarity_label.add_theme_color_override("font_color", upgrade.get_color())
-	rarity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	rarity_label.add_theme_font_size_override("font_size", 9)
-	vbox.add_child(rarity_label)
-
-	## İkon (varsa).
-	if upgrade.icon != null:
-		var icon_rect := TextureRect.new()
-		icon_rect.texture = upgrade.icon
-		icon_rect.custom_minimum_size = Vector2(48, 48)
-		icon_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
-		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		vbox.add_child(icon_rect)
-
-	## İsim.
-	var name_label := Label.new()
-	name_label.text = upgrade.display_name
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 12)
-	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	vbox.add_child(name_label)
-
-	## Açıklama.
-	var desc_label := RichTextLabel.new()
-	desc_label.text = upgrade.description
-	desc_label.fit_content = true
-	desc_label.scroll_active = false
-	desc_label.add_theme_font_size_override("normal_font_size", 10)
-	desc_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vbox.add_child(desc_label)
-
-	## Seçim butonu.
-	var btn := Button.new()
-	btn.text = "SEÇ"
-	btn.add_theme_color_override("font_color", upgrade.get_color())
-	btn.pressed.connect(_on_card_selected.bind(upgrade))
-	vbox.add_child(btn)
-
-	return panel
+	for c in _cards.get_children():
+		c.queue_free()
+	for c in _carets.get_children():
+		c.queue_free()
+	for i in _current_choices.size():
+		var caret := K.icon(K.EMBER_ICON, 1)
+		caret.custom_minimum_size = Vector2(CARD.x, 8)
+		caret.modulate.a = 0.0
+		_carets.add_child(caret)
+		var card := _make_card(_current_choices[i], i, caret)
+		_cards.add_child(card)
+	(_cards.get_child(0) as Button).grab_focus.call_deferred()
 
 
-## --- Açma / kapama ---
+func _make_card(u: UpgradeData, index: int, caret: Control) -> Button:
+	var metal := K.boon_color(u.rarity)
+	var b := Button.new()
+	b.custom_minimum_size = CARD
+	b.focus_mode = Control.FOCUS_ALL
+	var normal := K.frame(K.SOOT, metal, 2, 0)
+	var hot := K.frame(K.SLATE_1, K.GOLD_LT, 2, 0)
+	for st in ["normal", "disabled"]:
+		b.add_theme_stylebox_override(st, normal)
+	for st in ["hover", "focus", "pressed", "hover_pressed"]:
+		b.add_theme_stylebox_override(st, hot)
+	b.focus_entered.connect(func() -> void: caret.modulate.a = 1.0)
+	b.focus_exited.connect(func() -> void: caret.modulate.a = 0.0)
+	b.mouse_entered.connect(b.grab_focus)
+	b.pressed.connect(_on_card_selected.bind(u))
+
+	var v := K.vbox(6)
+	v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	v.offset_left = 10
+	v.offset_right = -10
+	v.offset_top = 9
+	v.offset_bottom = -9
+	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(v)
+	var rarity := K.num(K.boon_rarity_name(u.rarity).to_upper(), 12, metal)
+	rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(rarity)
+	var plate := K.panel(8, K.SLATE_3, K.VOID)
+	plate.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	plate.add_child(K.icon(K.glyph_for(u), 2))
+	v.add_child(plate)
+	var name := K.label(u.get_name_text(), 12, K.PARCH, K.font_medium())
+	name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	v.add_child(name)
+	var desc := K.label(u.get_desc_text(), 10, K.BONE)
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_child(desc)
+	var key := K.key_cap(str(index + 1), index == 0)
+	key.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	v.add_child(key)
+	for n in v.find_children("*", "Control", true, false):
+		(n as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return b
+
 
 func _open() -> void:
 	show()
 	get_tree().paused = true
-	## Animasyon: ekran ortadan büyüyerek açılır.
-	center_container.scale = Vector2(0.7, 0.7)
-	center_container.modulate.a = 0.0
-	var tw := create_tween()
-	tw.set_parallel(true)
-	tw.tween_property(center_container, "scale", Vector2.ONE, 0.2) \
-			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tw.tween_property(center_container, "modulate:a", 1.0, 0.15)
+	_root.modulate.a = 0.0
+	create_tween().tween_property(_root, "modulate:a", 1.0, 0.18)
 
 
 func _close() -> void:
 	var tw := create_tween()
-	tw.set_parallel(true)
-	tw.tween_property(center_container, "scale", Vector2(0.8, 0.8), 0.12) \
-			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tw.tween_property(center_container, "modulate:a", 0.0, 0.12)
-	tw.chain().tween_callback(_finish_close)
+	tw.tween_property(_root, "modulate:a", 0.0, 0.12)
+	tw.tween_callback(func() -> void:
+		hide()
+		_root.modulate.a = 1.0
+		get_tree().paused = false)
 
-
-func _finish_close() -> void:
-	hide()
-	get_tree().paused = false
-
-
-## --- Seçim ---
 
 func _on_card_selected(upgrade: UpgradeData) -> void:
+	if _current_choices.is_empty():
+		return
+	_current_choices = []
+	EventBus.sfx_requested.emit(&"ui_click")
 	RunManager.confirm_upgrade(upgrade)
 	_close()

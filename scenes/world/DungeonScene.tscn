@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/world/dungeon_scene.gd" id="1"]
 [ext_resource type="TileSet" path="res://assets/tilesets/dungeon_tileset.tres" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="3"]
+[ext_resource type="Material" path="res://assets/shaders/lit_tile.tres" id="4"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(14, 14)
@@ -11,10 +12,14 @@ size = Vector2(14, 14)
 script = ExtResource("1")
 
 [node name="FloorLayer" type="TileMapLayer" parent="."]
+material = ExtResource("4")
 tile_set = ExtResource("2")
 
 [node name="WallLayer" type="TileMapLayer" parent="."]
+material = ExtResource("4")
 tile_set = ExtResource("2")
+
+[node name="Decals" type="Node2D" parent="."]
 
 [node name="Entities" type="Node2D" parent="."]
 y_sort_enabled = true

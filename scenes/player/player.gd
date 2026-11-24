@@ -37,6 +37,7 @@ var _is_dashing: bool = false
 var _dash_timer: float = 0.0
 var _dash_cooldown_timer: float = 0.0
 var _dash_direction: Vector2 = Vector2.ZERO
+var _dash_cooldown_total: float = 0.6
 
 var _attack_timer: float = 0.0
 var _attack_cooldown_timer: float = 0.0
@@ -57,7 +58,9 @@ var _stats: StatsComponent = null
 @onready var hurtbox: HurtboxComponent = $HurtboxComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
 @onready var aim_pivot: Node2D = $AimPivot
-@onready var slash_effect: Polygon2D = $AimPivot/SlashEffect
+@onready var slash_effect: AnimatedSprite2D = $AimPivot/SlashEffect
+@onready var weapon_sprite: Sprite2D = $AimPivot/WeaponSprite
+@onready var flame: LightSource = $Flame
 
 
 func _ready() -> void:
@@ -84,6 +87,12 @@ func _ready() -> void:
 
 	_stats.stats_changed.connect(_on_stats_changed)
 	_on_stats_changed()
+
+	slash_effect.sprite_frames.set_animation_loop(&"swing", false)
+	slash_effect.animation_finished.connect(func() -> void: slash_effect.visible = false)
+	if RunManager.equipment != null:
+		RunManager.equipment.equipment_changed.connect(_refresh_weapon_sprite)
+	_refresh_weapon_sprite()
 
 
 func _physics_process(delta: float) -> void:
@@ -125,6 +134,22 @@ func _update_aim() -> void:
 	if to_mouse.length() > 1.0:
 		_aim_dir = to_mouse.normalized()
 	aim_pivot.rotation = _aim_dir.angle()
+	## Aiming up: the blade goes behind the body.
+	aim_pivot.z_index = -1 if _aim_dir.y < -0.35 else 0
+
+
+## The equipped weapon's icon is what the player holds.
+func _refresh_weapon_sprite() -> void:
+	var weapon: ItemData = RunManager.equipment.get_weapon() if RunManager.equipment != null else null
+	weapon_sprite.texture = weapon.icon if weapon != null else null
+	weapon_sprite.visible = weapon != null
+
+
+## 1 = ready, 0 = just used (the HUD's dash bar).
+func dash_ready_ratio() -> float:
+	if _dash_cooldown_timer <= 0.0:
+		return 1.0
+	return clampf(1.0 - _dash_cooldown_timer / maxf(_dash_cooldown_total, 0.01), 0.0, 1.0)
 
 
 func _can_dash(input_dir: Vector2) -> bool:
@@ -137,6 +162,7 @@ func _start_dash(input_dir: Vector2) -> void:
 	## Faz 7: dash_cooldown_multiplier upgrade varsa cooldown'u kısalt.
 	var cooldown_mult := _stats.get_dash_cooldown_multiplier() if _stats else 1.0
 	_dash_cooldown_timer = dash_cooldown * cooldown_mult
+	_dash_cooldown_total = _dash_cooldown_timer
 	_dash_direction = input_dir
 	## Faz 9: atılma sesi (dosya yoksa AudioManager sessiz geçer).
 	EventBus.sfx_requested.emit(&"dash")
@@ -177,12 +203,14 @@ func _start_attack() -> void:
 ## hafif, bağımlılıksız bir "juice" çözümü (sprite sanatı henüz yok).
 func _play_slash_effect() -> void:
 	slash_effect.visible = true
-	slash_effect.scale = Vector2(0.55, 0.55)
-	slash_effect.modulate.a = 0.85
-	var tween := create_tween()
-	tween.tween_property(slash_effect, "scale", Vector2(1.25, 1.25), attack_active_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(slash_effect, "modulate:a", 0.0, attack_active_time)
-	tween.finished.connect(func() -> void: slash_effect.visible = false)
+	slash_effect.frame = 0
+	slash_effect.play(&"swing")
+	## The blade swings through the arc.
+	var tw := create_tween()
+	weapon_sprite.rotation = 0.785398 - 1.0
+	tw.tween_property(weapon_sprite, "rotation", 0.785398 + 0.6, attack_active_time) \
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(weapon_sprite, "rotation", 0.785398, 0.12)
 
 
 ## Faz 7: HitboxComponent'in area_entered sinyaline bağlı değil; bunun yerine
@@ -274,6 +302,8 @@ func _on_died() -> void:
 	hurtbox.set_enabled(false)
 	hitbox.deactivate()
 	sprite.modulate.a = 0.4
+	## The ember goes out.
+	create_tween().tween_property(flame, "intensity", 1.2, 0.8)
 
 
 func _update_animation(input_dir: Vector2) -> void:

@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scenes/enemies/projectile.gd" id="1"]
 [ext_resource type="Script" path="res://components/hitbox_component.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/fx/frost_orb.png" id="3"]
+[ext_resource type="Script" path="res://components/light_source.gd" id="4"]
 
 [sub_resource type="CircleShape2D" id="1"]
 radius = 3.0
@@ -14,9 +16,14 @@ collision_layer = 256
 collision_mask = 1
 script = ExtResource("1")
 
-[node name="Visual" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-3, -3, 5, 0, -3, 3)
-color = Color(0.55, 0.85, 1, 1)
+[node name="Visual" type="Sprite2D" parent="."]
+texture = ExtResource("3")
+
+[node name="Glow" type="Node2D" parent="."]
+script = ExtResource("4")
+radius = 34.0
+intensity = 2.2
+flicker = 0.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1")

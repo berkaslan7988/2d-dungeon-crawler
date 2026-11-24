@@ -19,6 +19,8 @@ func _ready() -> void:
 	_noise.seed = randi()
 	_noise.frequency = 0.5
 	EventBus.screen_shake_requested.connect(add_shake)
+	shake_scale = 1.0 if Settings.screen_shake else 0.0
+	Settings.changed.connect(func() -> void: shake_scale = 1.0 if Settings.screen_shake else 0.0)
 
 
 func add_shake(amount: float) -> void:

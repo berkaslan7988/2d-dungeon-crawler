@@ -1,60 +1,128 @@
-## PauseMenu — ESC ile açılıp kapanan durdurma menüsü.
-## process_mode = ALWAYS: oyun durmuşken bile butonlar çalışır.
-## UpgradeScreen açıkken pause devre dışı (çakışma engeli).
-##
-## Faz 7/9: Mağaza — GameManager.meta_shop_pool'daki UpgradeData'ları kalıcı
-## para (meta_currency) ile satın alma ekranı. upgrade_screen.gd'deki kart
-## oluşturma deseni burada da (cost/owned durumu eklenerek) kullanılıyor.
+## PauseMenu — Esc pauses the run: resume, the Altar of Souls, settings, back
+## to the title (asks first: the run is lost) or quit.
 extends CanvasLayer
 
+const K = preload("res://scenes/ui/ui_kit.gd")
 const MAIN_MENU_SCENE: String = "res://scenes/ui/MainMenu.tscn"
 
-@onready var panel: Control = $Panel
-@onready var shop_panel: Control = $ShopPanel
-@onready var confirm_panel: Control = $ConfirmPanel
-@onready var shop_currency_label: Label = $ShopPanel/VBox/Header/CurrencyLabel
-@onready var shop_cards_grid: GridContainer = $ShopPanel/VBox/ScrollContainer/CardsGrid
+var _root: Control
+var _menu: VBoxContainer
+var _confirm: Control
+var _settings: SettingsPanel
+var _altar: AltarPanel
 
 
 func _ready() -> void:
+	layer = 20
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	for c in get_children():
+		c.queue_free()
+	_build()
 	hide()
-	shop_panel.hide()
-	confirm_panel.hide()
-	EventBus.meta_currency_changed.connect(_on_currency_changed)
+	Settings.changed.connect(func() -> void:
+		if not visible:
+			return
+		var reopen := _settings.visible
+		for c in get_children():
+			c.queue_free()
+		_build()
+		if reopen:
+			_menu.visible = false
+			_settings.open.call_deferred())
+
+
+func _build() -> void:
+	_root = Control.new()
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_root)
+	_root.add_child(K.scrim(0.7))
+	_menu = K.vbox(2)
+	_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_menu.alignment = BoxContainer.ALIGNMENT_CENTER
+	_root.add_child(_menu)
+	var t := K.title(tr("PAUSE_TITLE"), 38)
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_menu.add_child(t)
+	var gap := Control.new()
+	gap.custom_minimum_size = Vector2(0, 6)
+	_menu.add_child(gap)
+	_add(tr("PAUSE_RESUME"), _resume)
+	_add(tr("TITLE_ALTAR"), func() -> void:
+		_menu.visible = false
+		_altar.open())
+	_add(tr("TITLE_SETTINGS"), func() -> void:
+		_menu.visible = false
+		_settings.open())
+	_add(tr("PAUSE_MAIN_MENU"), _ask_main_menu)
+	if not OS.has_feature("web"):
+		_add(tr("TITLE_QUIT"), func() -> void: get_tree().quit())
+
+	_confirm = CenterContainer.new()
+	_confirm.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_confirm.visible = false
+	_root.add_child(_confirm)
+	var panel := K.panel(12, K.BLOOD)
+	panel.custom_minimum_size = Vector2(240, 0)
+	_confirm.add_child(panel)
+	var col := K.vbox(10)
+	panel.add_child(col)
+	var q := K.label(tr("PAUSE_CONFIRM"), 10, K.PARCH)
+	q.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	q.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	col.add_child(q)
+	var row := K.hbox(8)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	var yes := K.button(tr("PAUSE_CONFIRM_YES"), 10)
+	yes.pressed.connect(func() -> void:
+		get_tree().paused = false
+		GameManager.change_scene(MAIN_MENU_SCENE))
+	var no := K.button(tr("PAUSE_CONFIRM_NO"), 10)
+	no.pressed.connect(_back_to_menu)
+	row.add_child(no)
+	row.add_child(yes)
+	col.add_child(row)
+	_confirm.set_meta("no", no)
+
+	_settings = SettingsPanel.new()
+	_settings.closed.connect(_back_to_menu)
+	_root.add_child(_settings)
+	_altar = AltarPanel.new()
+	_altar.closed.connect(_back_to_menu)
+	_root.add_child(_altar)
+
+
+func _add(text: String, action: Callable) -> void:
+	var b := K.menu_button(text, 14)
+	b.pressed.connect(action)
+	_menu.add_child(b)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("pause"):
 		return
-	## Upgrade seçim ekranı açıkken pause açılmasın.
+	## Another screen (boons, chest, dialogue) owns the pause.
 	if get_tree().paused and not visible:
 		return
 	if visible:
-		## ESC önceliği: onay > mağaza > resume.
-		if confirm_panel.visible:
-			_on_confirm_no()
-		elif shop_panel.visible:
-			_on_shop_back_pressed()
+		if _settings.visible or _altar.visible:
+			return  # those panels close themselves
+		if _confirm.visible:
+			_back_to_menu()
 		else:
 			_resume()
 	else:
 		_open()
+	get_viewport().set_input_as_handled()
 
 
 func _open() -> void:
 	show()
-	panel.show()
-	shop_panel.hide()
-	confirm_panel.hide()
+	_menu.visible = true
+	_confirm.visible = false
 	get_tree().paused = true
-	## Küçük animasyon: panel yukarıdan kayarak gelir.
-	panel.modulate.a = 0.0
-	panel.position.y = -20.0
-	var tw := create_tween()
-	tw.set_parallel(true)
-	tw.tween_property(panel, "modulate:a", 1.0, 0.15)
-	tw.tween_property(panel, "position:y", 0.0, 0.15).set_trans(Tween.TRANS_QUAD)
+	_root.modulate.a = 0.0
+	create_tween().tween_property(_root, "modulate:a", 1.0, 0.15)
+	(_menu.get_child(2) as Button).grab_focus.call_deferred()
 
 
 func _resume() -> void:
@@ -62,108 +130,13 @@ func _resume() -> void:
 	get_tree().paused = false
 
 
-func _on_resume_pressed() -> void:
-	_resume()
+func _ask_main_menu() -> void:
+	_menu.visible = false
+	_confirm.visible = true
+	(_confirm.get_meta("no") as Button).grab_focus()
 
 
-## "Ana Menü" → önce onay sor (ilerleme kaybı uyarısı).
-func _on_main_menu_pressed() -> void:
-	panel.hide()
-	shop_panel.hide()
-	confirm_panel.show()
-
-
-func _on_confirm_no() -> void:
-	confirm_panel.hide()
-	panel.show()
-
-
-func _on_confirm_yes() -> void:
-	get_tree().paused = false
-	GameManager.change_scene(MAIN_MENU_SCENE)
-
-
-func _on_quit_pressed() -> void:
-	get_tree().quit()
-
-
-## --- Mağaza ---
-
-func _on_shop_pressed() -> void:
-	panel.hide()
-	shop_panel.show()
-	_refresh_shop()
-
-
-func _on_shop_back_pressed() -> void:
-	shop_panel.hide()
-	panel.show()
-
-
-func _on_currency_changed(_new_total: int) -> void:
-	if shop_panel.visible:
-		_refresh_shop()
-
-
-func _refresh_shop() -> void:
-	shop_currency_label.text = "* %d" % GameManager.meta_currency
-
-	for child in shop_cards_grid.get_children():
-		child.queue_free()
-
-	if GameManager.meta_shop_pool == null:
-		return
-
-	for upgrade in GameManager.meta_shop_pool.upgrades:
-		shop_cards_grid.add_child(_make_shop_card(upgrade))
-
-
-## upgrade_screen.gd'deki _make_card() ile aynı görsel dil (rarity rengi,
-## rounded border) — buna ek olarak fiyat/sahiplik durumu gösteren bir buton.
-func _make_shop_card(upgrade: UpgradeData) -> PanelContainer:
-	var shop_panel_card := PanelContainer.new()
-	shop_panel_card.custom_minimum_size = Vector2(120, 150)
-
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("1a1a2e")
-	style.border_color = upgrade.get_color()
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(6)
-	shop_panel_card.add_theme_stylebox_override("panel", style)
-
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 4)
-	shop_panel_card.add_child(vbox)
-
-	var name_label := Label.new()
-	name_label.text = upgrade.display_name
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 11)
-	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	vbox.add_child(name_label)
-
-	var desc_label := RichTextLabel.new()
-	desc_label.text = upgrade.description
-	desc_label.fit_content = true
-	desc_label.scroll_active = false
-	desc_label.add_theme_font_size_override("normal_font_size", 9)
-	desc_label.custom_minimum_size = Vector2(0, 55)
-	desc_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vbox.add_child(desc_label)
-
-	var btn := Button.new()
-	if GameManager.is_meta_upgrade_purchased(upgrade.id):
-		btn.text = "SAHİP"
-		btn.disabled = true
-	else:
-		btn.text = "%d * Satın Al" % upgrade.meta_cost
-		btn.disabled = GameManager.meta_currency < upgrade.meta_cost
-		btn.pressed.connect(_on_buy_pressed.bind(upgrade))
-	vbox.add_child(btn)
-
-	return shop_panel_card
-
-
-func _on_buy_pressed(upgrade: UpgradeData) -> void:
-	if GameManager.purchase_meta_upgrade(upgrade):
-		_refresh_shop()
+func _back_to_menu() -> void:
+	_confirm.visible = false
+	_menu.visible = true
+	(_menu.get_child(2) as Button).grab_focus.call_deferred()

@@ -1,0 +1,189 @@
+keys,en,tr
+GAME_TITLE,Sunless Crown,Güneşsiz Taç
+TITLE_TAGLINE,Nine floors · Three Wardens · One ember,Dokuz kat · Üç Muhafız · Tek bir köz
+TITLE_DESCEND,Descend,Başla
+TITLE_ALTAR,Altar of Souls,Ruhlar Sunağı
+TITLE_SETTINGS,Settings,Ayarlar
+TITLE_QUIT,Quit,Çık
+TITLE_HINT,W S CHOOSE · ENTER CONFIRM,W S SEÇ · ENTER ONAYLA
+TITLE_BEST_FLOOR,BEST FLOOR,EN DERİN KAT
+COMMON_SOULS,SOULS,RUH
+COMMON_SOULS_SHORT,souls,ruh
+COMMON_BACK,Back,Geri
+COMMON_CONTINUE,CONTINUE,DEVAM
+COMMON_ON,On,Açık
+COMMON_OFF,Off,Kapalı
+SETTINGS_TITLE,Settings,Ayarlar
+SETTINGS_LANGUAGE,Language,Dil
+SETTINGS_MASTER,Volume,Ses
+SETTINGS_MUSIC,Music,Müzik
+SETTINGS_SFX,Effects,Efektler
+SETTINGS_FULLSCREEN,Fullscreen,Tam ekran
+SETTINGS_SHAKE,Screen shake,Ekran sarsıntısı
+ALTAR_TITLE,Altar of Souls,Ruhlar Sunağı
+ALTAR_SUBTITLE,Offer souls for boons that stay with you every run.,"Ruh sun, her koşuda seninle kalacak lütuflar al."
+ALTAR_OWNED,Owned,Alındı
+BOON_LEVEL,Level %d,Seviye %d
+BOON_CHOOSE,Choose a boon,Bir lütuf seç
+BOON_HINT,1 · 2 · 3 OR CLICK · THE DARK WAITS UNTIL YOU CHOOSE,1 · 2 · 3 YA DA TIKLA · SEÇENE DEK KARANLIK BEKLER
+CHEST_TITLE,Treasure chest,Hazine sandığı
+CHEST_TAKE,Take all (E),Hepsini al (E)
+CHEST_EMPTY,The chest was empty…,Sandık boştu…
+CHEST_BOON,Boon,Lütuf
+END_DEATH,The ember goes out,Köz söndü
+END_DEATH_SUB,Your souls return to the altar.,Ruhların sunağa döner.
+END_VICTORY,The curse is broken,Lanet kırıldı
+END_VICTORY_SUB,The sun rises over Aethelgard again.,Aethelgard'da güneş yeniden doğuyor.
+END_FLOOR,FLOOR REACHED,ULAŞILAN KAT
+END_SLAIN,SLAIN,ÖLDÜRÜLEN
+END_LEVEL,LEVEL,SEVİYE
+END_TIME,TIME,SÜRE
+END_SOULS,SOULS EARNED,KAZANILAN RUH
+END_RETRY,Descend again,Yeniden başla
+END_MENU,Title screen,Ana menü
+HUD_FLOOR,FLOOR,KAT
+HUD_DASH,DASH,ATIL
+HUD_DMG,DMG,HSR
+HUD_LV,LV,SV
+HUD_UNARMED,Unarmed,Silahsız
+PAUSE_TITLE,Paused,Duraklatıldı
+PAUSE_RESUME,Resume,Devam et
+PAUSE_MAIN_MENU,Title screen,Ana menü
+PAUSE_CONFIRM,Return to the title screen? This run will be lost.,Ana menüye dönülsün mü? Bu koşu kaybolacak.
+PAUSE_CONFIRM_YES,"Yes, leave","Evet, çık"
+PAUSE_CONFIRM_NO,Stay,Kal
+TOAST_FLOOR_CLEARED,Floor cleared · find the stairs,Kat temizlendi · merdiveni bul
+TOAST_CLEAR_FIRST,Clear the floor first,Önce katı temizle
+INV_TITLE,Inventory,Envanter
+INV_HINT,E CLOSE · RIGHT CLICK SELLS,E KAPAT · SAĞ TIK SATAR
+INV_WEAPON,WEAPON,SİLAH
+INV_HEAD,HEAD,BAŞ
+INV_CHEST,BODY,GÖVDE
+INV_FEET,FEET,AYAK
+INV_SELL,RIGHT CLICK: SELL FOR %d SOULS,SAĞ TIK: %d RUHA SAT
+INV_DELTA_DAMAGE,IF WORN: DAMAGE %.0f > %.0f,GİYERSEN: HASAR %.0f > %.0f
+INV_DELTA_DEFENSE,IF WORN: DEFENSE %.0f > %.0f,GİYERSEN: SAVUNMA %.0f > %.0f
+RARITY_COMMON,Common,Sıradan
+RARITY_UNCOMMON,Uncommon,Nadide
+RARITY_RARE,Rare,Nadir
+RARITY_EPIC,Epic,Epik
+RARITY_LEGENDARY,Legendary,Efsanevi
+STAT_DAMAGE,DAMAGE +%.0f,HASAR +%.0f
+STAT_ATTACK_SPEED,ATTACK SPEED x%.2f,SALDIRI HIZI x%.2f
+STAT_KNOCKBACK,KNOCKBACK +%.0f,GERİ TEPME +%.0f
+STAT_DEFENSE,DEFENSE +%.0f,SAVUNMA +%.0f
+STAT_LIFE,LIFE +%.0f,CAN +%.0f
+STAT_SPEED,SPEED +%.0f,HIZ +%.0f
+STAT_HEAL,HEALS %.0f LIFE,%.0f CAN YENİLER
+STAT_BUFF,BOOST +%.0f,GÜÇ +%.0f
+UPG_DESC_DAMAGE_FLAT,+%s damage,+%s hasar
+UPG_DESC_DAMAGE_PERCENT,+%s%% damage,+%%%s hasar
+UPG_DESC_HEALTH_FLAT,+%s max life,+%s azami can
+UPG_DESC_SPEED_FLAT,+%s move speed,+%s hareket hızı
+UPG_DESC_ATTACK_SPEED,+%s%% attack speed,+%%%s saldırı hızı
+UPG_DESC_DEFENSE_FLAT,+%s defense,+%s savunma
+UPG_DESC_LIFE_STEAL,%s%% of the damage you deal returns as life.,Verdiğin hasarın %%%s kadarı can olarak döner.
+UPG_DESC_DASH_COOLDOWN,Dash recovers %s%% faster.,Atılma %%%s daha çabuk dolar.
+UPG_DESC_HEALTH_PERCENT,+%s%% max life,+%%%s azami can
+UPG_DESC_SPEED_PERCENT,+%s%% move speed,+%%%s hareket hızı
+STORY_TITLE,Sunless Crown,Güneşsiz Taç
+STORY_BODY,"Once, the kingdom of Aethelgard shone under a sun that never set.
+Then the King put on the Sunless Crown that slept in the deep.
+The crown promised him forever, and took the kingdom's light in return.
+The sun went out. The people turned to stone, the knights to shadow.
+You are the last ember, born from the ashes.
+Descend the nine floors the three Wardens guard. Break the crown, or become part of the dark.","Bir zamanlar Aethelgard krallığı, güneşin hiç batmadığı topraklarda parlardı.
+Ta ki Kral, yeraltının derinliklerinde uyuyan Güneşsiz Taç'ı başına geçirene dek.
+Taç ona ölümsüzlük vaat etti — karşılığında krallığın ışığını aldı.
+Güneş söndü. Halk taşa, şövalyeler gölgeye döndü.
+Sen, küllerden doğan son alevsin.
+Üç Muhafız'ın koruduğu dokuz kata in. Taç'ı kır — ya da karanlığın bir parçası ol."
+BOSS_GAROTH_NAME,Garoth,Garoth
+BOSS_GAROTH_TITLE,The Broken Warden,Kırık Muhafız
+BOSS_GAROTH_INTRO,"Turn back, little flame. Past this threshold there is only a deeper dark.
+The King ordered me to guard this door… and I still obey, even as my flesh rots.","Geri dön, küçük alev. Bu eşiğin ardında yalnızca daha derin bir karanlık var.
+Kral bana bu kapıyı korumayı emretti... ve ben hâlâ itaat ediyorum — etim çürürken bile."
+BOSS_GAROTH_DEFEAT,"At last… my chains are broken. Thank you, mortal.
+But those below are not as merciful as I was. Myrra's silence is waiting for you.","Sonunda... zincirlerim kırıldı. Teşekkür ederim, ölümlü.
+Ama aşağıdakiler benim kadar merhametli değil. Myrra'nın sessizliği seni bekliyor."
+BOSS_MYRRA_NAME,Myrra,Myrra
+BOSS_MYRRA_TITLE,Mother of Silence,Sessizliğin Anası
+BOSS_MYRRA_INTRO,"Your footsteps echoed all the way down here. A pity no one below will hear you scream.
+Garoth was weak; he could still feel pity. I know no mercy.","Adımların buraya kadar yankılandı. Ne yazık ki aşağıda kimse çığlıklarını duymayacak.
+Garoth zayıftı, hâlâ acıyabiliyordu. Ben merhamet bilmem."
+BOSS_MYRRA_DEFEAT,"The silence… takes me at last. I see the Crown, hero…
+it is calling you. I wonder if you can bear its whisper.","Sessizlik... nihayet beni de aldı. Taç'ı görüyorum, kahraman...
+seni çağırıyor. Onun fısıltısına dayanabilecek misin, merak ediyorum."
+BOSS_VORLAK_NAME,King Vorlak,Kral Vorlak
+BOSS_VORLAK_TITLE,Lord of the Sunless Crown,Güneşsiz Taç'ın Efendisi
+BOSS_VORLAK_INTRO,"So you are the last mortal to climb to my throne.
+My kingdom turned to ash, my people to stone… yet here I remain, forever.
+You too will be buried in this dark.","Demek tahtıma çıkan son ölümlü sensin.
+Krallığım kül oldu, halkım taşa döndü... ama ben hâlâ buradayım, sonsuza dek.
+Sen de bu karanlığa gömüleceksin."
+BOSS_VORLAK_DEFEAT,"The Crown… it falls from my head… After all these years… I feel the light again.
+Perhaps this was the salvation. Let the curse end with you, hero.
+Let the sun… rise… again.","Taç... başımdan düşüyor... Onca yıldan sonra... ışığı yeniden hissediyorum.
+Belki de kurtuluş buymuş. Lanet seninle bitsin, kahraman.
+Güneş... yeniden... doğsun."
+ITEM_BONE_FRAGMENT_NAME,Bone Fragment,Kemik Parçası
+ITEM_BONE_FRAGMENT_DESC,Loot worth a few souls.,Satılabilir bir ganimet.
+ITEM_BROADSWORD_NAME,Broadsword,Pala
+ITEM_BROADSWORD_DESC,"Wide, heavy strikes.","Geniş, güçlü darbeler."
+ITEM_FLAME_BLADE_NAME,Flame Blade,Alev Kılıcı
+ITEM_FLAME_BLADE_DESC,Legendary burning steel.,Efsanevi yanan çelik.
+ITEM_GREATER_POTION_NAME,Greater Potion,Büyük İksir
+ITEM_GREATER_POTION_DESC,Restores a great deal of life.,Bol miktarda can yeniler.
+ITEM_HEALTH_POTION_NAME,Potion,İksir
+ITEM_HEALTH_POTION_DESC,Restores some life.,İçildiğinde canı bir miktar yeniler.
+ITEM_IRON_ARMOR_NAME,Iron Armor,Demir Zırh
+ITEM_IRON_ARMOR_DESC,Solid protection for the body.,Sağlam gövde koruması.
+ITEM_IRON_GREAVES_NAME,Iron Greaves,Demir Dizlik
+ITEM_IRON_GREAVES_DESC,Guarded legs.,Korumalı bacaklar.
+ITEM_IRON_HELM_NAME,Iron Helm,Demir Miğfer
+ITEM_IRON_HELM_DESC,A sturdy helm.,Dayanıklı miğfer.
+ITEM_IRON_SWORD_NAME,Iron Sword,Demir Kılıç
+ITEM_IRON_SWORD_DESC,"A reliable, balanced blade.","Güvenilir, dengeli bir kılıç."
+ITEM_LEATHER_ARMOR_NAME,Leather Armor,Deri Zırh
+ITEM_LEATHER_ARMOR_DESC,Light but useful.,Hafif ama işe yarar bir göğüslük. Savunmayı biraz artırır.
+ITEM_LEATHER_BOOTS_NAME,Leather Boots,Deri Çizme
+ITEM_LEATHER_BOOTS_DESC,Light and quick.,Hafif ve hızlı.
+ITEM_LEATHER_CAP_NAME,Leather Cap,Deri Başlık
+ITEM_LEATHER_CAP_DESC,Simple head protection.,Basit kafa koruması.
+ITEM_PLATE_ARMOR_NAME,Plate Armor,Plaka Zırh
+ITEM_PLATE_ARMOR_DESC,The heaviest guard; slows you a little.,En ağır koruma; biraz yavaşlatır.
+ITEM_RUSTY_SWORD_NAME,Rusty Sword,Paslı Kılıç
+ITEM_RUSTY_SWORD_DESC,"Old, but it still cuts.",Eski ama hâlâ keser. Vuruşa biraz güç katar.
+ITEM_SLIME_GOO_NAME,Slime Essence,Slime Özü
+ITEM_SLIME_GOO_DESC,Sticky stuff slimes leave behind.,Slime'lardan kalan yapışkan madde. İleride zanaatte kullanılabilir.
+ITEM_STEEL_DAGGER_NAME,Steel Dagger,Çelik Hançer
+ITEM_STEEL_DAGGER_DESC,"Fast, with a short reach.",Hızlı ama kısa menzilli.
+ITEM_WAR_HAMMER_NAME,War Hammer,Savaş Çekici
+ITEM_WAR_HAMMER_DESC,Heavy and slow; huge knockback.,Ağır ve yavaş; büyük geri tepme.
+UPG_ATTACK_SPEED_PLUS_NAME,Quick Hands,Çevik Eller
+UPG_BERSERK_NAME,Berserk,Çılgınlık
+UPG_BIG_DAMAGE_NAME,Keen Point,Keskin Uç
+UPG_BIG_HEALTH_NAME,Sound Body,Sağlam Beden
+UPG_DAMAGE_MULTIPLIER_NAME,Blood Rage,Kan Öfkesi
+UPG_DAMAGE_PLUS_NAME,Keen Edge,Keskin Kenar
+UPG_DASH_COOLDOWN_REDUCE_NAME,Shadow Step,Gölge Adım
+UPG_DEFENSE_PLUS_NAME,Stone Skin,Taş Deri
+UPG_FLEET_NAME,Wind Feet,Rüzgar Ayak
+UPG_FORTITUDE_NAME,Fortitude,Dayanıklılık
+UPG_GLASS_CANNON_NAME,Glass Cannon,Cam Top
+UPG_GREATER_LIFESTEAL_NAME,Bloodsucker,Kan Emici
+UPG_HEALTH_PLUS_NAME,Iron Heart,Demir Yürek
+UPG_HUGE_DAMAGE_NAME,Deadly Force,Ölümcül Güç
+UPG_IRON_SKIN_NAME,Iron Skin,Demir Deri
+UPG_JUGGERNAUT_NAME,Juggernaut,Dev
+UPG_LIFE_STEAL_NAME,Vampiric Touch,Vampir Dokunuşu
+UPG_META_ATTACK_SPEED_NAME,Lasting Fury,Kalıcı Şiddet
+UPG_META_DAMAGE_NAME,Lasting Might,Kalıcı Güç
+UPG_META_DEFENSE_NAME,Lasting Armor,Kalıcı Zırh
+UPG_META_HEALTH_NAME,Lasting Vigor,Kalıcı Dayanıklılık
+UPG_META_SPEED_NAME,Lasting Swiftness,Kalıcı Çabukluk
+UPG_QUICK_DASH_NAME,Quick Dash,Hızlı Atılış
+UPG_SHARPEN_NAME,Sharpen,Bileme
+UPG_SPEED_PLUS_NAME,Wind Step,Rüzgar Adımı
+UPG_SWIFT_NAME,Swift,Çeviklik
+UPG_VITALITY_NAME,Vitality,Canlılık

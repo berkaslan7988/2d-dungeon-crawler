@@ -1,76 +1,103 @@
-## DeathScreen — run bitişinde (ölüm veya zafer) gösterilen özet ekranı.
-## EventBus.run_ended(victory) sinyaline bağlanır.
-## Run özeti: kat, öldürülen düşman, ulaşılan level, kazanılan meta para.
-## process_mode = ALWAYS: oyun dururken de tıklanabilir olması için.
+## DeathScreen — the end of a run, death or victory: what you reached and
+## the souls it earned. Listens to EventBus.run_ended.
 extends CanvasLayer
 
-@onready var panel:          Control = $Panel
-@onready var title_label:    Label   = $Panel/VBox/Title
-@onready var summary_label:  Label   = $Panel/VBox/Summary
-@onready var retry_btn:      Button  = $Panel/VBox/Buttons/RetryBtn
-@onready var menu_btn:       Button  = $Panel/VBox/Buttons/MenuBtn
+const K = preload("res://scenes/ui/ui_kit.gd")
 
-const COLOR_DEATH   := Color("e74c3c")
-const COLOR_VICTORY := Color("f1c40f")
+var _root: Control
+var _title: Label
+var _sub: Label
+var _stats: GridContainer
+var _retry: Button
+var _menu: Button
 
 
 func _ready() -> void:
+	layer = 30
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	for c in get_children():
+		c.queue_free()
+	_build()
 	hide()
 	EventBus.run_ended.connect(_on_run_ended)
 
 
+func _build() -> void:
+	_root = Control.new()
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_root)
+	_root.add_child(K.scrim(0.86))
+	var col := K.vbox(8)
+	col.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	col.alignment = BoxContainer.ALIGNMENT_CENTER
+	_root.add_child(col)
+	_title = K.title("", 48)
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	col.add_child(_title)
+	_sub = K.label("", 11, K.BONE)
+	_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	col.add_child(_sub)
+	var center := CenterContainer.new()
+	col.add_child(center)
+	_stats = GridContainer.new()
+	_stats.columns = 2
+	_stats.add_theme_constant_override("h_separation", 24)
+	_stats.add_theme_constant_override("v_separation", 2)
+	center.add_child(_stats)
+	var buttons := K.hbox(8)
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	_retry = K.button("", 11)
+	_retry.pressed.connect(_on_retry_pressed)
+	_menu = K.button("", 11)
+	_menu.pressed.connect(_on_menu_pressed)
+	buttons.add_child(_retry)
+	buttons.add_child(_menu)
+	col.add_child(buttons)
+
+
 func _on_run_ended(victory: bool) -> void:
-	## Kısa gecikme: ölüm animasyonu/fade bittikten sonra ekran açılsın.
 	await get_tree().create_timer(0.8).timeout
 	_populate(victory)
 	_open()
 
 
 func _populate(victory: bool) -> void:
-	if victory:
-		title_label.text = "ZAFERİN KUTLU OLSUN!"
-		title_label.add_theme_color_override("font_color", COLOR_VICTORY)
-	else:
-		title_label.text = "ÖLDÜN!"
-		title_label.add_theme_color_override("font_color", COLOR_DEATH)
-
-	## Run istatistikleri (RunManager ve GameManager'dan al)
-	var floor_reached := RunManager.current_floor
-	var killed        := RunManager.enemies_killed
-	var lvl           := RunManager.level
-	## Ödül GameManager._on_run_ended'da hesaplanıp saklandı (tek kaynak).
-	var earned        := GameManager.last_run_reward
-	## Faz 8 UX: roadmap'in açıkça istediği "süre" alanı.
-	var duration      := RunManager.get_run_duration()
-	var duration_sec  := int(duration)
+	_title.text = tr("END_VICTORY") if victory else tr("END_DEATH")
+	_title.add_theme_color_override("font_color", K.GOLD_LT if victory else K.PARCH)
+	_title.add_theme_color_override("font_shadow_color", K.EMBER_DK if victory else K.BLOOD_DK)
+	_sub.text = tr("END_VICTORY_SUB") if victory else tr("END_DEATH_SUB")
+	for c in _stats.get_children():
+		c.queue_free()
+	var secs := int(RunManager.get_run_duration())
 	@warning_ignore("integer_division")
-	var duration_str  := "%d:%02d" % [duration_sec / 60, duration_sec % 60]
+	var time := "%d:%02d" % [secs / 60, secs % 60]
+	_stat(tr("END_FLOOR"), str(RunManager.current_floor), K.PARCH)
+	_stat(tr("END_SLAIN"), str(RunManager.enemies_killed), K.PARCH)
+	_stat(tr("END_LEVEL"), str(RunManager.level), K.PARCH)
+	_stat(tr("END_TIME"), time, K.PARCH)
+	_stat(tr("END_SOULS"), "+%d" % GameManager.last_run_reward, K.GOLD)
+	_retry.text = tr("END_RETRY")
+	_menu.text = tr("END_MENU")
 
-	summary_label.text = (
-		"Ulaşılan Kat : %d\n"
-		+ "Öldürülen    : %d düşman\n"
-		+ "Level        : %d\n"
-		+ "Süre         : %s\n"
-		+ "Kazanılan    : 💀 %d ruh"
-	) % [floor_reached, killed, lvl, duration_str, earned]
+
+func _stat(label: String, value: String, color: Color) -> void:
+	var l := K.num(label, 13, K.ASH_LT)
+	_stats.add_child(l)
+	var v := K.num(value, 13, color)
+	v.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_stats.add_child(v)
 
 
 func _open() -> void:
 	show()
-	## Oyunu durdur: altta düşmanlar gezmeye devam etmesin. DeathScreen
-	## process_mode=ALWAYS olduğu için butonlar yine çalışır; retry/menu
-	## get_tree().paused=false ile devam ettirir.
 	get_tree().paused = true
-	## Fade-in animasyonu
-	panel.modulate.a = 0.0
-	var tw := create_tween()
-	tw.tween_property(panel, "modulate:a", 1.0, 0.4)
+	_root.modulate.a = 0.0
+	create_tween().tween_property(_root, "modulate:a", 1.0, 0.5)
+	_retry.grab_focus.call_deferred()
 
 
 func _on_retry_pressed() -> void:
 	hide()
-	## Oyun tree'sini durdurmuş olabilir (UpgradeScreen vs.) — sıfırla
 	get_tree().paused = false
 	RunManager.start_run()
 

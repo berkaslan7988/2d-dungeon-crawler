@@ -1,15 +1,19 @@
-[gd_resource type="Resource" script_class="BossData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="BossData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/boss_data.gd" id="1"]
 
+[ext_resource type="SpriteFrames" path="res://assets/sprites/wardens/myrra_frames.tres" id="frames"]
+
 [resource]
 script = ExtResource("1")
+key = "MYRRA"
 display_name = "Sessizliğin Anası Myrra"
 intro_text = "Adımların buraya kadar yankılandı. Ne yazık ki aşağıda kimse çığlıklarını duymayacak.\nGaroth zayıftı, hâlâ acıyabiliyordu. Ben merhamet bilmem."
 defeat_text = "Sessizlik... nihayet beni de aldı. Taç'ı görüyorum, kahraman...\nseni çağırıyor. Onun fısıltısına dayanabilecek misin, merak ediyorum."
 is_final = false
-sprite_tint = Color(0.6, 0.4, 0.75, 1)
-sprite_scale = 2.45
+sprite_frames = ExtResource("frames")
+sprite_tint = Color(1, 1, 1, 1)
+sprite_scale = 1.0
 max_health = 260.0
 move_speed = 38.0
 slam_damage = 20.0

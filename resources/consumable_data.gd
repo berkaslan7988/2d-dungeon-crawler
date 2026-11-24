@@ -17,7 +17,7 @@ func _init() -> void:
 func get_stat_lines() -> Array[String]:
 	match effect:
 		Effect.HEAL:
-			return ["İyileştirme: +%.0f can" % value]
+			return [TranslationServer.translate("STAT_HEAL") % value]
 		Effect.BUFF:
-			return ["Güçlendirme: +%.0f" % value]
+			return [TranslationServer.translate("STAT_BUFF") % value]
 	return []

@@ -18,10 +18,6 @@ const MINIMAP_SCENE:        PackedScene = preload("res://scenes/ui/Minimap.tscn"
 const CHEST_SCREEN_SCENE:   PackedScene = preload("res://scenes/ui/ChestScreen.tscn")
 const DIALOGUE_SCREEN_SCENE: PackedScene = preload("res://scenes/ui/DialogueScreen.tscn")
 
-## Faz 10 (hikaye): oyun başında okunan karanlık fantezi girişi.
-const STORY_TITLE := "GÜNEŞSİZ TAÇ"
-const STORY_BODY := "Bir zamanlar Aethelgard krallığı, güneşin hiç batmadığı topraklarda parlardı.\nTa ki Kral, yeraltının derinliklerinde uyuyan Güneşsiz Taç'ı başına geçirene dek.\nTaç ona ölümsüzlük vaat etti — karşılığında krallığın ışığını aldı.\nGüneş söndü. Halk taşa, şövalyeler gölgeye döndü.\nSen, küllerden doğan son alevsin.\nÜç Muhafız'ın koruduğu dokuz kata in. Taç'ı kır — ya da karanlığın bir parçası ol."
-
 @onready var floor_root: Node2D = $FloorRoot
 
 
@@ -39,4 +35,4 @@ func _ready() -> void:
 	RunManager.start_run()
 
 	## Oyun açılışında hikaye girişini göster (DialogueScreen duraklatır).
-	EventBus.story_requested.emit(STORY_TITLE, STORY_BODY)
+	EventBus.story_requested.emit(tr("STORY_TITLE"), tr("STORY_BODY"))

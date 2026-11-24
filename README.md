@@ -1,168 +1,115 @@
-<div align="center">
+<p align="center">
+  <img src="docs/mark.png" width="96" alt="The Sunless Crown mark: a black sun whose gold corona rises into five crown points">
+</p>
 
-# 🗡️ Güneşsiz Taç — 2D Dungeon Crawler
+<h1 align="center">Sunless Crown</h1>
 
-**Prosedürel, roguelite esintili top-down zindan sürünücüsü · Godot 4.7 · GDScript**
+<p align="center">
+  A top-down roguelite made in Godot 4.7. Nine floors, three Wardens, one ember.<br>
+  <a href="https://crown.aslanlabs.online"><b>Play in the browser</b></a> · <a href="../../releases/latest">Windows build</a> · English and Türkçe
+</p>
 
-<img width="1920" height="1080" alt="resim" src="https://github.com/user-attachments/assets/38a77045-e2b1-462c-be24-93799bea31ea" />
+<p align="center">
+  <img src="docs/screens/game.png" width="860" alt="Floor 1: the player's flame lights a stone hall warm brown while the corridors around it stay cold blue; a slime takes 27 damage">
+</p>
 
-</div>
+The kingdom's sun went out the day its king put on the Sunless Crown. You are the last ember: a small knight with a flame for a head, and the only warm light in the game. Go down through nine floors built from a seed, take a boon every time you level up, and break the curse the three Wardens guard.
 
----
+## What's in it
 
-```
-Bir zamanlar Aethelgard krallığı hiç batmayan bir güneşin altında parlardı —
-ta ki Kral, derinlerdeki Güneşsiz Taç'ı başına geçirene dek.
-```
+- **Procedural floors.** Rooms and corridors from a seed, with a flood-fill check that every room can be reached. The stairs down open once the floor is clear.
+- **Combat.** Mouse aim, a dash with invulnerability frames, knockback, hit-stop, screen shake and damage numbers.
+- **Six enemies,** each driven by a small state machine: slimes, slimes that split, bats, frost mages that keep their distance, and brutes.
+- **Three Wardens** on floors 3, 6 and 9. Each has two phases, telegraphed slams, volleys, summons and their own lines before and after the fight.
+- **Loot and builds.** Weapons and armor in five rarities, 22 boons in three, potions, and an Altar where the souls from every run buy boons that stay.
+- **English and Turkish,** switchable on the title screen or the pause menu. Keyboard, mouse and gamepad.
 
-Küllerden doğan son alevsin. Üç Muhafız'ın koruduğu dokuz kata in ve laneti kır — ya da karanlığın bir parçası ol.
+<table>
+  <tr>
+    <td><img src="docs/screens/title.png" alt="Title screen: the eclipse crown over the name and four choices"></td>
+    <td><img src="docs/screens/boon.png" alt="Level up: three boons, each framed in the metal of its rarity"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screens/warden.png" alt="King Vorlak speaks before the last fight, with his portrait"></td>
+    <td><img src="docs/screens/inventory.png" alt="Inventory: four equipment slots and the bag"></td>
+  </tr>
+</table>
 
----
+## Design: Ember in the dark
 
-## ✨ Özellikler
+<p align="center">
+  <img src="docs/cast.png" width="760" alt="The cast at 4×: the ember knight, a slime, a splitter, a bat, a frost mage, a brute, and the Wardens Garoth, Myrra and Vorlak">
+</p>
 
-| Özellik | Detaylar |
-|---------|----------|
-| 🎲 **Prosedürel** | Oda+koridor üretici, seed desteği, flood-fill bağlanabilirlik garantisi |
-| ⚔️ **Dövüş** | Bileşen tabanlı Hitbox/Hurtbox, fareyle nişan, dash, i-frame, geri itme, hit-flash |
-| 🤖 **Düşman AI** | FSM tabanlı 6 düşman türü (menzilli, bölünen, tank) |
-| 👑 **Boss & Hikaye** | 3 çok fazlı boss (3/6/9. katlar), telegraph'lı saldırı + diyaloglar |
-| 🎒 **Sistemler** | Loot, envanter, ekipman, 22 upgrade, XP/seviye, meta ilerleme, JSON kayıt |
-| ✨ **Juice & UI** | Ekran sarsıntısı, hit-stop, partikül, hasar sayıları, shader, havuzlama, tam UI |
+**Only the ember is warm.** Orange and gold always mean fire: the player, braziers, souls, the sword's trail. Red means danger. Everything else is cold stone.
 
-## 🎮 Kontroller
+**Light shifts the palette instead of tinting it.** Tiles store a shade (0 to 3) instead of a colour. A shader adds the light level at each pixel (0 to 5, with ordered dithering between levels) and reads the colour from a single stone ramp. Stone goes from near-black blue in the dark to warm brown next to the flame without ever leaving the palette. `LightManager` packs the nearest light sources into a small texture every frame.
 
-| Eylem | Tuş |
-|-------|-----|
-| Hareket | `WASD` · Yön tuşları |
-| Nişan | Fare |
-| Saldırı | `F` · Sol tık |
-| Atılma | `Shift` |
-| Etkileşim | `Q` |
-| Envanter | `E` |
-| Duraklat | `Esc` |
+<p align="center">
+  <img src="docs/ramp.png" width="580" alt="The same floor tile at light levels 0 to 5, from near black blue to warm brown">
+</p>
 
-Gamepad desteklenir.
+**The dark hides; eyes give it away.** Floors you have not walked are black. Outside the light, enemies are silhouettes and only their eyes and spells glow.
 
-## 🚀 Çalıştırma
+**One palette, drawn in code.** The game uses 32 colours. Every sprite, tile and icon is a grid of characters in [`tools/art`](tools/art), and `build.py` renders them to PNG. That includes the mark, the three Wardens and every item icon.
 
-1. **Godot 4.7** (GL Compatibility) indir: <https://godotengine.org>
-2. Bu depoyu klonla/indir.
-3. Godot'ta **İçe Aktar** → `project.godot` seç → **Aç**.
-4. **Oynat (F5)** ile çalıştır.
+<p align="center">
+  <img src="docs/palette.png" width="768" alt="The 32-colour palette">
+</p>
 
-> Sesler `assets/audio/` altında (bkz. `FAZ9_SES_REHBERI.md`). Eksik dosya varsa oyun sessiz çalışır, çökmez.
+The type is Jacquard 24 for titles and Warden names, Pixelify Sans for the interface and dialogue, and Jersey 10 for numbers.
 
-## 🧱 Mimari
+## Controls
 
-Veri/koddan ayrık (`Resource` + `.tres`), sinyalle gevşek bağ (`EventBus`), yeniden kullanılabilir bileşenler, tek-kaynak sabitler.
-
-```
-autoload/    EventBus · GameManager · RunManager · SaveManager · AudioManager · Juice
-components/  Health · Hitbox · Hurtbox · Stats · Inventory · Equipment · ShakeCamera
-resources/   ItemData · WeaponData · EnemyData · BossData · UpgradeData · LootTable
-systems/     DungeonGenerator (rooms + corridors + connectivity)
-scenes/      player · enemies (Enemy/Boss/Projectile) · items · world · ui · fx
-data/        enemies · bosses · items · upgrades · loot_tables  (.tres content)
-```
-
-## 🙏 Krediler
-
-- **Motor:** [Godot](https://godotengine.org) (MIT)
-- **Görseller:** yer tutucu görseller
-- **Ses:** ücretsiz CC0 kaynaklar ([Kenney.nl](https://kenney.nl)) + atıflı CC-BY parçalar
-
-## 📜 Lisans
-
-Kod **MIT** altında — bkz. [LICENSE](LICENSE). Üçüncü taraf varlıklar kendi lisanslarındadır.
-
-<div align="center">
-
-*"Laneti kır, ya da karanlığın bir parçası ol."*
-
-</div>
-
----
----
-
-<div align="center">
-
-# 🗡️ Sunless Crown — 2D Dungeon Crawler
-
-**Procedural roguelite dungeon crawler · Godot 4.7 · GDScript**
-
-</div>
-
----
-
-```
-Aethelgard once shone under a sun that never set —
-until the King wore the Sunless Crown buried in the deep.
-```
-
-You are the last ember born from the ashes. Descend the nine floors guarded by three Wardens and break the curse — or become part of the dark.
-
----
-
-## ✨ Features
-
-| Feature | Details |
-|---------|---------|
-| 🎲 **Procedural** | Room+corridor generator, seed support, flood-fill connectivity guarantee |
-| ⚔️ **Combat** | Component-based Hitbox/Hurtbox, mouse-aim, dash, i-frames, knockback, hit-flash |
-| 🤖 **Enemy AI** | FSM (idle/patrol/chase/attack), 6 types incl. ranged, splitting, tank |
-| 👑 **Bosses & Story** | 3 multi-phase bosses (floors 3/6/9), telegraphed attacks, pre/post-fight dialogue |
-| 🎒 **Systems** | Loot, inventory, equipment, 22 upgrades, XP/level, meta progression, JSON save |
-| ✨ **Juice & UI** | Screen shake, hit-stop, particles, damage numbers, shaders, object pooling, full menu/HUD/minimap |
-
-## 🎮 Controls
-
-| Action | Key |
-|--------|-----|
-| Move | `WASD` · Arrows |
+| Action | Keys |
+| --- | --- |
+| Move | WASD or arrow keys |
 | Aim | Mouse |
-| Attack | `F` · Left click |
-| Dash | `Shift` |
-| Interact | `Q` |
-| Inventory | `E` |
-| Pause | `Esc` |
+| Attack | Left click, F or Enter |
+| Dash | Shift |
+| Interact | Q |
+| Inventory | E (right click an item to turn it into souls) |
+| Pause | Esc |
+| Fullscreen | F11 |
 
-Gamepad supported.
+A gamepad works too: d-pad to move, A to attack, B to dash, X to interact, Y for the inventory, Start to pause.
 
-## 🚀 Run
+## Run it from source
 
-1. Get **Godot 4.7** (GL Compatibility): <https://godotengine.org>
-2. Clone/download this repo.
-3. In Godot: **Import** → select `project.godot` → **Open**.
-4. Press **Play (F5)**.
+1. Install [Godot 4.7](https://godotengine.org) (the standard build).
+2. Open `project.godot` and press F5.
 
-> Audio lives in `assets/audio/` (see `FAZ9_SES_REHBERI.md`). Missing files = silent, no crash.
+The art is regenerated with `python tools/art/build.py` (needs Pillow). The translation table comes from `python tools/i18n_build.py`, which writes `i18n/strings.csv`. `export_presets.cfg` has a Web preset (no threads, so no special headers) and a Windows preset.
 
-## 🧱 Architecture
-
-Data-driven (`Resource` + `.tres`), signal-based loose coupling (`EventBus`), reusable components, single-source constants.
+## How it is built
 
 ```
-autoload/    EventBus · GameManager · RunManager · SaveManager · AudioManager · Juice
-components/  Health · Hitbox · Hurtbox · Stats · Inventory · Equipment · ShakeCamera
+autoload/    EventBus · GameManager · RunManager · SaveManager · AudioManager · Juice · LightManager · Settings
+components/  Health · Hitbox · Hurtbox · Stats · Inventory · Equipment · ShakeCamera · LightSource
 resources/   ItemData · WeaponData · EnemyData · BossData · UpgradeData · LootTable
-systems/     DungeonGenerator (rooms + corridors + connectivity)
-scenes/      player · enemies (Enemy/Boss/Projectile) · items · world · ui · fx
-data/        enemies · bosses · items · upgrades · loot_tables  (.tres content)
+systems/     DungeonGenerator: rooms, corridors, connectivity
+scenes/      player · enemies · items · props · world · fx · ui (built in code on one UI kit)
+assets/      shaders (the light model) · sprites · tilesets · fonts · audio
+data/        enemies · bosses · items · upgrades · loot tables (.tres)
+tools/       art kit · translation table · screenshot runner
 ```
 
-## 🙏 Credits
+Data lives in `Resource` files, systems talk through signals on `EventBus`, and reusable behaviour sits in components.
 
-- **Engine:** [Godot](https://godotengine.org) (MIT)
-- **Sprites/tiles:** placeholder art
-- **Audio:** free CC0 sources ([Kenney.nl](https://kenney.nl)) + attributed CC-BY tracks
+## Credits
 
-## 📜 License
+- Engine: [Godot](https://godotengine.org) (MIT).
+- Fonts: Jacquard 24, Pixelify Sans and Jersey 10, all under the SIL Open Font License. The licence texts are in [`assets/fonts`](assets/fonts).
+- Art: drawn for this game in `tools/art`, under the same licence as the code.
 
-Code under **MIT** — see [LICENSE](LICENSE). Third-party assets keep their own licenses.
+Details are in [THIRD-PARTY.md](THIRD-PARTY.md).
 
-<div align="center">
+## License
 
-*"Break the curse, or become part of the dark."*
+The code and art are MIT, see [LICENSE](LICENSE). Fonts and audio by others keep their own licences.
 
-</div>
+## Türkçe
+
+Güneşsiz Taç, Godot 4.7 ile yapılmış, yukarıdan bakışlı bir roguelite. Krallığın güneşi, kral Güneşsiz Taç'ı taktığı gün söndü. Sen son közsün: kafası alevden küçük bir şövalye ve oyundaki tek sıcak ışık. Dokuz kata in, her seviyede bir lütuf seç ve üç Muhafız'ın koruduğu laneti kır.
+
+Oyun Türkçe ve İngilizce oynanabiliyor; dil başlık ekranından ya da duraklatma menüsünden değişiyor. [Tarayıcıda oyna](https://crown.aslanlabs.online).

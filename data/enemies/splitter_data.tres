@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://resources/enemy_data.gd" id="1"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/slime_frames.tres" id="2"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/enemies/splitter_frames.tres" id="2"]
 [ext_resource type="Resource" path="res://data/loot_tables/slime_loot_table.tres" id="3"]
 [ext_resource type="Resource" path="res://data/enemies/mini_slime_data.tres" id="4"]
 
@@ -9,8 +9,8 @@
 script = ExtResource("1")
 display_name = "Bölünen Slime"
 sprite_frames = ExtResource("2")
-sprite_tint = Color(0.4, 0.85, 1, 1)
-sprite_scale = 1.15
+sprite_tint = Color(1, 1, 1, 1)
+sprite_scale = 1.0
 max_health = 30.0
 move_speed = 32.0
 damage = 7.0

@@ -10,14 +10,20 @@ config_version=5
 
 [application]
 
-config/name="2D Dungeon Crawler"
+config/name="Sunless Crown"
+config/description="A descent through nine dark floors. You are the last ember."
+config/version="2.0.0"
 run/main_scene="res://scenes/ui/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
+boot_splash/bg_color=Color(0.0235, 0.0235, 0.0353, 1)
+boot_splash/show_image=false
 
 [autoload]
 
 Constants="*res://autoload/constants.gd"
+Settings="*res://autoload/settings.gd"
+LightManager="*res://autoload/light_manager.gd"
 EventBus="*res://autoload/event_bus.gd"
 SaveManager="*res://autoload/save_manager.gd"
 GameManager="*res://autoload/game_manager.gd"
@@ -29,10 +35,14 @@ Juice="*res://autoload/juice.gd"
 
 window/size/viewport_width=640
 window/size/viewport_height=360
-window/size/mode=3
-window/stretch/mode="viewport"
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
 
 [gui]
+
+theme/default_font_antialiasing=1
 
 theme/custom="res://themes/dungeon_theme.tres"
 
@@ -111,8 +121,34 @@ pause={
 2d_physics/layer_8="pickups"
 2d_physics/layer_9="projectiles"
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://i18n/strings.en.translation", "res://i18n/strings.tr.translation")
+locale/fallback="en"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true
+environment/defaults/default_clear_color=Color(0.0235, 0.0235, 0.0353, 1)
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+
+[shader_globals]
+
+sc_lights={
+"type": "sampler2D",
+"value": ""
+}
+sc_light_count={
+"type": "int",
+"value": 0
+}
+sc_fog={
+"type": "sampler2D",
+"value": ""
+}
+sc_fog_rect={
+"type": "vec4",
+"value": Vector4(-1000000, -1000000, 2000000, 2000000)
+}

@@ -1,28 +1,55 @@
-## ChestScreen — Faz 10 (kullanıcı isteği): sandık açılınca oyunu durdurur,
-## içindeki eşyaları (+ varsa yetenek) listeler; "Hepsini Al" ile hepsi
-## envantere eklenir (yetenek uygulanır), ekran kapanır ve oyun devam eder.
+## ChestScreen — a chest opens when you walk up to it: the run pauses, its
+## contents are listed (and a boon, sometimes), "Take all" puts everything in
+## the inventory.
 extends CanvasLayer
 
-@onready var panel: Control = $Panel
-@onready var items_box: VBoxContainer = $Panel/VBox/ItemsBox
-@onready var upgrade_label: Label = $Panel/VBox/UpgradeLabel
-@onready var take_btn: Button = $Panel/VBox/TakeBtn
+const K = preload("res://scenes/ui/ui_kit.gd")
 
 var _items: Array = []
 var _upgrade: UpgradeData = null
+var _root: Control
+var _list: VBoxContainer
+var _title: Label
+var _take: Button
 
 
 func _ready() -> void:
+	layer = 15
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	for c in get_children():
+		c.queue_free()
+	_build()
 	hide()
 	EventBus.chest_opened.connect(_on_chest_opened)
-	take_btn.pressed.connect(_on_take)
+
+
+func _build() -> void:
+	_root = Control.new()
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_root)
+	_root.add_child(K.scrim(0.6))
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_root.add_child(center)
+	var panel := K.panel(12, K.BRONZE)
+	panel.custom_minimum_size = Vector2(230, 0)
+	center.add_child(panel)
+	var col := K.vbox(8)
+	panel.add_child(col)
+	_title = K.title("", 28)
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	col.add_child(_title)
+	_list = K.vbox(4)
+	col.add_child(_list)
+	_take = K.button("", 10)
+	_take.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_take.pressed.connect(_on_take)
+	col.add_child(_take)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
-	## "E" (inventory action), Q (interact), Enter/Space ile "Hepsini Al".
 	if event.is_action_pressed("inventory") or event.is_action_pressed("interact") \
 			or event.is_action_pressed("ui_accept"):
 		_on_take()
@@ -32,19 +59,19 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_chest_opened(items: Array, upgrade: UpgradeData) -> void:
 	_items = items
 	_upgrade = upgrade
-	_build()
+	_title.text = tr("CHEST_TITLE")
+	_take.text = tr("CHEST_TAKE")
+	_fill()
 	show()
 	get_tree().paused = true
-	take_btn.grab_focus()
-	panel.modulate.a = 0.0
-	create_tween().tween_property(panel, "modulate:a", 1.0, 0.18)
+	_take.grab_focus.call_deferred()
+	_root.modulate.a = 0.0
+	create_tween().tween_property(_root, "modulate:a", 1.0, 0.18)
 
 
-func _build() -> void:
-	for child in items_box.get_children():
-		child.queue_free()
-
-	## Aynı eşyaları say (x adet göster).
+func _fill() -> void:
+	for c in _list.get_children():
+		c.queue_free()
 	var counts: Dictionary = {}
 	var order: Array = []
 	for it in _items:
@@ -52,38 +79,39 @@ func _build() -> void:
 			counts[it] = 0
 			order.append(it)
 		counts[it] += 1
-
 	if order.is_empty() and _upgrade == null:
-		var empty := Label.new()
-		empty.text = "(Sandık boştu...)"
-		items_box.add_child(empty)
-
+		var empty := K.label(tr("CHEST_EMPTY"), 10, K.ASH_LT)
+		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_list.add_child(empty)
 	for it in order:
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 6)
-
-		if it.icon != null:
-			var icon := TextureRect.new()
-			icon.texture = it.icon
-			icon.custom_minimum_size = Vector2(20, 20)
-			icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
-			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			row.add_child(icon)
-
-		var lbl := Label.new()
+		var row := K.hbox(6)
+		var slot := K.panel(1, K.SLATE_3, K.VOID)
+		slot.add_child(K.icon(it.icon))
+		row.add_child(slot)
+		var name := K.label(it.get_name_text(), 10, K.item_color(it.rarity), K.font_medium())
+		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		name.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		row.add_child(name)
 		var n: int = counts[it]
-		lbl.text = "%s%s" % [it.display_name, (" x%d" % n) if n > 1 else ""]
-		## Kullanıcı isteği: sandıktaki tüm eşyalar yeşil gösterilir.
-		lbl.add_theme_color_override("font_color", Color(0.5, 0.9, 0.5))
-		row.add_child(lbl)
-		items_box.add_child(row)
-
+		if n > 1:
+			var c := K.num("×%d" % n, 13, K.BONE)
+			c.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			row.add_child(c)
+		_list.add_child(row)
 	if _upgrade != null:
-		upgrade_label.visible = true
-		upgrade_label.text = "✦ Yetenek: %s — %s" % [_upgrade.display_name, _upgrade.description]
-		upgrade_label.add_theme_color_override("font_color", _upgrade.get_color())
-	else:
-		upgrade_label.visible = false
+		var sep := ColorRect.new()
+		sep.color = K.SLATE_2
+		sep.custom_minimum_size = Vector2(0, 1)
+		_list.add_child(sep)
+		var row := K.hbox(6)
+		var plate := K.panel(1, K.boon_color(_upgrade.rarity), K.VOID)
+		plate.add_child(K.icon(K.glyph_for(_upgrade)))
+		row.add_child(plate)
+		var t := K.vbox(0)
+		t.add_child(K.num(tr("CHEST_BOON").to_upper(), 11, K.boon_color(_upgrade.rarity)))
+		t.add_child(K.label("%s · %s" % [_upgrade.get_name_text(), _upgrade.get_desc_text()], 9, K.PARCH))
+		row.add_child(t)
+		_list.add_child(row)
 
 
 func _on_take() -> void:
